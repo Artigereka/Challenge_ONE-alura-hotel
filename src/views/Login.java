@@ -1,5 +1,7 @@
 package views;
 
+import java.com.alura.hotel.utils.Credentials;
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,6 +19,10 @@ import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Login extends JFrame {
 
@@ -50,6 +56,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		super("Login - Hotel Alura");
 		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,13 +85,14 @@ public class Login extends JFrame {
 		panel_1.add(imgHotel);
 		imgHotel.setIcon(new ImageIcon(Login.class.getResource("/imagenes/img-hotel-login-.png")));
 		
-		JPanel btnexit = new JPanel();
+		final JPanel btnexit = new JPanel();
 		btnexit.setBounds(251, 0, 53, 36);
 		panel_1.add(btnexit);
 		btnexit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
+				Confirmacion confirmacion = new Confirmacion();
+				confirmacion.setVisible(true);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -93,8 +101,8 @@ public class Login extends JFrame {
 			}			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				 btnexit.setBackground(new Color(12, 138, 199));
-			     labelExit.setForeground(Color.white);
+				btnexit.setBackground(new Color(12, 138, 199));
+				labelExit.setForeground(Color.white);
 			}
 		});
 		btnexit.setBackground(new Color(12, 138, 199));
@@ -109,17 +117,25 @@ public class Login extends JFrame {
 		labelExit.setHorizontalAlignment(SwingConstants.CENTER);		
 		
 		txtUsuario = new JTextField();
-		txtUsuario.addMouseListener(new MouseAdapter() {
+		txtUsuario.addFocusListener(new FocusAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
-				 if (txtUsuario.getText().equals("Ingrese su nombre de usuario")) {
-					 txtUsuario.setText("");
-					 txtUsuario.setForeground(Color.black);
-			        }
-			        if (String.valueOf(txtContrasena.getPassword()).isEmpty()) {
-			        	txtContrasena.setText("********");
-			        	txtContrasena.setForeground(Color.gray);
-			        }
+			public void focusGained(FocusEvent e) {
+				if (txtUsuario.getText().equals("Ingrese su nombre de usuario")) {
+					txtUsuario.setText("");
+					txtUsuario.setForeground(Color.black);
+				}
+				if (String.valueOf(txtContrasena.getPassword()).isEmpty()) {
+					txtContrasena.setText("********");
+					txtContrasena.setForeground(Color.gray);
+				}
+			}
+		});
+		txtUsuario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+	        login();
+	            }
 			}
 		});
 		txtUsuario.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -179,7 +195,7 @@ public class Login extends JFrame {
 		lblContrasea.setBounds(65, 316, 140, 26);
 		panel.add(lblContrasea);
 		
-		JPanel btnLogin = new JPanel();
+		final JPanel btnLogin = new JPanel();
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -192,7 +208,7 @@ public class Login extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Login();
+				login();
 			}
 		});
 		btnLogin.setBackground(SystemColor.textHighlight);
@@ -234,28 +250,31 @@ public class Login extends JFrame {
 		header.setLayout(null);
 	}
 	
-	private void Login() {
-		 String Usuario= "admin";
-	     String Contraseña="admin";
+	private void login() {
+		Credentials credentials = new Credentials();
+		String username = credentials.getUsername();
+		String password = credentials.getPassword();
 
-	        String contrase=new String (txtContrasena.getPassword());
+		String inputPassword = new String(txtContrasena.getPassword());
 
-	        if(txtUsuario.getText().equals(Usuario) && contrase.equals(Contraseña)){
-	            MenuUsuario menu = new MenuUsuario();
-	            menu.setVisible(true);
-	            dispose();	 
-	        }else {
-	            JOptionPane.showMessageDialog(this, "Usuario o Contraseña no válidos");
-	        }
-	} 
-	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
-	        xMouse = evt.getX();
-	        yMouse = evt.getY();
-	    }//GEN-LAST:event_headerMousePressed
+		if (txtUsuario.getText().equals(username) && inputPassword.equals(password)) {
+			MenuUsuario menu = new MenuUsuario();
+			menu.setVisible(true);
+			dispose();
+		} else {
+			JOptionPane.showMessageDialog(this, "Usuario o Contraseña no válidos");
+		}
+	}
 
-	    private void headerMouseDragged(java.awt.event.MouseEvent evt) {
-	        int x = evt.getXOnScreen();
-	        int y = evt.getYOnScreen();
-	        this.setLocation(x - xMouse, y - yMouse);
-}
+	private void headerMousePressed(java.awt.event.MouseEvent evt) {
+		xMouse = evt.getX();
+		yMouse = evt.getY();
+	}
+
+	private void headerMouseDragged(java.awt.event.MouseEvent evt) {
+		int x = evt.getXOnScreen();
+		int y = evt.getYOnScreen();
+		this.setLocation(x - xMouse, y - yMouse);
+	}
+	
 }
