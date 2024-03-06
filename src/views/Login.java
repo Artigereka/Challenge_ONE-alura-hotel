@@ -1,6 +1,6 @@
 package views;
 
-import java.com.alura.hotel.utils.Credentials;
+import java.com.alura.hotel.utils.UserCredentials;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -251,7 +251,7 @@ public class Login extends JFrame {
 	}
 	
 	private void login() {
-		Credentials credentials = new Credentials();
+		UserCredentials credentials = new UserCredentials();
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
 

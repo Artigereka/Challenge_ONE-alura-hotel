@@ -32,10 +32,11 @@ import java.com.alura.hotel.utils.ReservePrice;
 @SuppressWarnings("serial")
 public class RegistroReservas extends JFrame {
 
+	protected String selectedPayment = null;
 	private JPanel contentPane;
-	public static JTextField txtValor;
-	public static JDateChooser txtFechaEntrada;
-	public static JDateChooser txtFechaSalida;
+	public JTextField txtValor;
+	public JDateChooser txtFechaEntrada;
+	public JDateChooser txtFechaSalida;
 	public static JComboBox<String> txtFormaPago;
 	int xMouse, yMouse;
 	private JLabel labelExit;
@@ -292,28 +293,29 @@ public class RegistroReservas extends JFrame {
 		txtFormaPago.setBorder(new LineBorder(new Color(255, 255, 255), 1, true));
 		txtFormaPago.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtFormaPago.setModel(new DefaultComboBoxModel<String>(new String[] {"Tarjeta de Crédito", "Tarjeta de Débito", "Dinero en efectivo"}));
+		selectedPayment = (String) txtFormaPago.getSelectedItem();
 		panel.add(txtFormaPago);
 
-		JPanel btnViejoHuesped = new JPanel();
-		btnViejoHuesped.setToolTipText("");
-		btnViejoHuesped.setLayout(null);
-		btnViejoHuesped.setBackground(SystemColor.textHighlight);
-		btnViejoHuesped.setBounds(70, 475, 130, 35);
-		btnViejoHuesped.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-		btnViejoHuesped.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-//				TO DO: llevar a indice de huespedes para elegir
-			}
-		});
-		panel.add(btnViejoHuesped);
-
-		JLabel labelViejoHuesped = new JLabel("VIEJO");
-		labelViejoHuesped.setHorizontalAlignment(SwingConstants.CENTER);
-		labelViejoHuesped.setForeground(new Color(255, 255, 255));
-		labelViejoHuesped.setFont(new Font("Roboto", Font.PLAIN, 18));
-		labelViejoHuesped.setBounds(0, 0, 130, 35);
-		btnViejoHuesped.add(labelViejoHuesped);
+//		JPanel btnViejoHuesped = new JPanel();
+//		btnViejoHuesped.setToolTipText("");
+//		btnViejoHuesped.setLayout(null);
+//		btnViejoHuesped.setBackground(SystemColor.textHighlight);
+//		btnViejoHuesped.setBounds(70, 475, 130, 35);
+//		btnViejoHuesped.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+//		btnViejoHuesped.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				//TO DO: llevar a indice de huespedes para elegir
+//			}
+//		});
+//		panel.add(btnViejoHuesped);
+//
+//		JLabel labelViejoHuesped = new JLabel("VIEJO");
+//		labelViejoHuesped.setHorizontalAlignment(SwingConstants.CENTER);
+//		labelViejoHuesped.setForeground(new Color(255, 255, 255));
+//		labelViejoHuesped.setFont(new Font("Roboto", Font.PLAIN, 18));
+//		labelViejoHuesped.setBounds(0, 0, 130, 35);
+//		btnViejoHuesped.add(labelViejoHuesped);
 		
 		JPanel btnNuevoHuesped = new JPanel();
 		btnNuevoHuesped.setToolTipText("");
@@ -324,12 +326,14 @@ public class RegistroReservas extends JFrame {
 		btnNuevoHuesped.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TO DO: check that the fechaSalida is later fechaEntrada
-				if (RegistroReservas.txtFechaEntrada.getDate() != null && RegistroReservas.txtFechaSalida.getDate() != null) {		
+				if (txtFechaEntrada.getDate() != null
+						&& txtFechaSalida.getDate() != null
+						&& !txtValor.getText().isEmpty()) {	
 					RegistroHuesped registro = new RegistroHuesped(RegistroReservas.this);
 					registro.setVisible(true);
-				} else {
-					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos correctamente.");
 				}
 			}						
 		});
@@ -349,10 +353,12 @@ public class RegistroReservas extends JFrame {
 			Date dateIn = txtFechaEntrada.getDate();
 			Date dateOut = txtFechaSalida.getDate();
 			Integer daysDifference = (int) TimeUnit.MILLISECONDS.toDays(dateOut.getTime() - dateIn.getTime());
-			if (dateOut.after(dateIn)) {
+			// TO DO: When a date is delete the txtValor should be like ""
+			if (dateOut.after(dateIn) || dateOut.equals(daysDifference)) {
 				ReservePrice rp = new ReservePrice(daysDifference);
 				txtValor.setText("$ " + rp.getTotalPrice().toString());				
-			} else {
+			}
+			else {
 				txtValor.setText("");
 			}
 		}
