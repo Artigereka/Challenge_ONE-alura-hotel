@@ -14,6 +14,9 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -32,11 +35,11 @@ import java.com.alura.hotel.utils.ReservePrice;
 @SuppressWarnings("serial")
 public class RegistroReserva extends JFrame {
 
-	protected String selectedPayment = null;
+	protected String selectedPayment = "";
 	private JPanel contentPane;
-	public JTextField txtValor;
-	public JDateChooser txtFechaEntrada;
-	public JDateChooser txtFechaSalida;
+	protected JTextField txtValor;
+	protected JDateChooser txtFechaEntrada;
+	protected JDateChooser txtFechaSalida;
 	public static JComboBox<String> txtFormaPago;
 	int xMouse, yMouse;
 	private JLabel labelExit;
@@ -137,41 +140,30 @@ public class RegistroReserva extends JFrame {
 		header.setBounds(0, 0, 910, 36);
 		header.setLayout(null);
 		header.setBackground(Color.WHITE);
-		header.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				headerMouseDragged(e);
-			     
-			}
-		});
-		header.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				headerMousePressed(e);
-			}
-		});
 		panel.add(header);
 		
 		final JPanel btnAtras = new JPanel();
 		btnAtras.setLayout(null);
 		btnAtras.setBackground(Color.WHITE);
 		btnAtras.setBounds(0, 0, 53, 36);
-		btnAtras.addMouseListener(new MouseAdapter() {
+		header.addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MenuPrincipal usuario = new MenuPrincipal();
 				usuario.setVisible(true);
-				dispose();				
+				dispose();
 			}
+			
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btnAtras.setBackground(new Color(12, 138, 199));
 				labelAtras.setForeground(Color.white);
-			}			
+			}
+			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				 btnAtras.setBackground(Color.white);
-			     labelAtras.setForeground(Color.black);
+				btnAtras.setBackground(Color.white);
+				labelAtras.setForeground(Color.black);
 			}
 		});
 		header.add(btnAtras);
@@ -214,7 +206,7 @@ public class RegistroReserva extends JFrame {
 		lblFormaPago.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		panel.add(lblFormaPago);
 
-		JLabel lblHuesped = new JLabel("HUÉSPED");
+		JLabel lblHuesped = new JLabel("HUESPED");
 		lblHuesped.setForeground(SystemColor.textInactiveText);
 		lblHuesped.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		lblHuesped.setBounds(70, 450, 290, 14);
@@ -292,10 +284,19 @@ public class RegistroReserva extends JFrame {
 		txtFormaPago.setBackground(SystemColor.text);
 		txtFormaPago.setBorder(new LineBorder(new Color(255, 255, 255), 1, true));
 		txtFormaPago.setFont(new Font("Roboto", Font.PLAIN, 16));
-		txtFormaPago.setModel(new DefaultComboBoxModel<String>(new String[] {"Tarjeta de Crédito", "Tarjeta de Débito", "Dinero en efectivo"}));
-		selectedPayment = (String) txtFormaPago.getSelectedItem();
+		txtFormaPago.setModel(new DefaultComboBoxModel<String>(new String[] {"Tarjeta de Credito", "Tarjeta de Debito", "Dinero en efectivo"}));
+		txtFormaPago.setSelectedIndex(-1);
+		txtFormaPago.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					JComboBox<?> cb = (JComboBox<?>) e.getSource();
+					selectedPayment = (String) cb.getSelectedItem();
+				}
+			}
+		});
 		panel.add(txtFormaPago);
 
+		// TO DO:
 //		JPanel btnViejoHuesped = new JPanel();
 //		btnViejoHuesped.setToolTipText("");
 //		btnViejoHuesped.setLayout(null);
@@ -328,7 +329,8 @@ public class RegistroReserva extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (txtFechaEntrada.getDate() != null
 						&& txtFechaSalida.getDate() != null
-						&& !txtValor.getText().isEmpty()) {	
+						&& !txtValor.getText().isEmpty()
+						&& selectedPayment != "") {	
 					RegistroHuesped registro = new RegistroHuesped(RegistroReserva.this);
 					registro.setVisible(true);
 				}
@@ -354,7 +356,7 @@ public class RegistroReserva extends JFrame {
 			Date dateOut = txtFechaSalida.getDate();
 			Integer daysDifference = (int) TimeUnit.MILLISECONDS.toDays(dateOut.getTime() - dateIn.getTime());
 			// TO DO: When a date is delete the txtValor should be like ""
-			if (dateOut.after(dateIn) || dateOut.equals(daysDifference)) {
+			if (dateOut.after(dateIn) || dateOut.equals(dateIn)) {
 				ReservePrice rp = new ReservePrice(daysDifference);
 				txtValor.setText("$ " + rp.getTotalPrice().toString());				
 			}

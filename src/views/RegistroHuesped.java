@@ -90,15 +90,13 @@ public class RegistroHuesped extends JFrame {
 		header.setBounds(0, 0, 910, 36);
 		contentPane.add(header);
 		
-		JPanel btnAtras = new JPanel();
+		final JPanel btnAtras = new JPanel();
 		btnAtras.setLayout(null);
 		btnAtras.setBackground(new Color(12, 138, 199));
 		btnAtras.setBounds(0, 0, 53, 36);
 		btnAtras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				RegistroReserva reservas = new RegistroReserva();
-				reservas.setVisible(true);
 				dispose();				
 			}
 			@Override
@@ -130,7 +128,12 @@ public class RegistroHuesped extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				MenuPrincipal usuario = new MenuPrincipal();
 				usuario.setVisible(true);
-				reservas.dispose();
+				try {
+					reservas.dispose();
+				}
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				dispose();
 			}
 			@Override
@@ -169,7 +172,7 @@ public class RegistroHuesped extends JFrame {
 		imagenFondo.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/registro.png")));
 		panel.add(imagenFondo);
 
-		JLabel lblTitulo = new JLabel("REGISTRO DE NUEVO HUÉSPED");
+		JLabel lblTitulo = new JLabel("REGISTRO DE NUEVO HUESPED");
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitulo.setBounds(560, 55, 289, 42);
 		lblTitulo.setForeground(new Color(12, 138, 199));
@@ -200,7 +203,7 @@ public class RegistroHuesped extends JFrame {
 		lblNacionalidad.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		contentPane.add(lblNacionalidad);
 
-		JLabel lblTelefono = new JLabel("TELÉFONO");
+		JLabel lblTelefono = new JLabel("TELEFONO");
 		lblTelefono.setBounds(562, 406, 253, 14);
 		lblTelefono.setForeground(SystemColor.textInactiveText);
 		lblTelefono.setFont(new Font("Roboto Black", Font.PLAIN, 18));
@@ -264,10 +267,10 @@ public class RegistroHuesped extends JFrame {
 		txtNacionalidad.setBackground(SystemColor.text);
 		txtNacionalidad.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtNacionalidad.setModel(new DefaultComboBoxModel<>(new String[] {
-				"Argentina", "Boliviana", "Brasileña", "Canadiense", "Chilena", "Colombiana",
+				"Argentina", "Boliviana", "Brasilenia", "Canadiense", "Chilena", "Colombiana",
 				"Costarricense", "Cubana", "Dominicana", "Ecuatoriana", "Estadounidense",
-				"Guatemalteca", "Hondureña", "Mexicana", "Nicaragüense", "Panameña",
-				"Paraguaya", "Peruana", "Salvadoreña", "Uruguaya", "Venezolana"}));
+				"Guatemalteca", "Hondurenia", "Mexicana", "Nicaraguense", "Panamenia",
+				"Paraguaya", "Peruana", "Salvadorenia", "Uruguaya", "Venezolana"}));
 		txtNacionalidad.setSelectedIndex(-1);
 		txtNacionalidad.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -298,28 +301,7 @@ public class RegistroHuesped extends JFrame {
 				
 				if (!txtNombre.getText().isEmpty() && !txtApellido.getText().isEmpty() && txtFechaN.getDate() != null
 						&& selectedNationality != "" && !txtTelefono.getText().isEmpty()) {
-					ConnectionFactory factory = new ConnectionFactory();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					try {
-						Connection con = factory.createConnection();
-						Guests guests = new Guests(con);
-						Reserves reserves = new Reserves(con);
-						txtNreserva = reserves.createReserve(
-								guests.createGuest(txtNombre.getText().toString(), txtApellido.getText().toString(),
-										sdf.format(txtFechaN.getDate()).toString(), selectedNationality,
-										txtTelefono.getText().toString()),
-								sdf.format(reservas.txtFechaEntrada.getDate()).toString(),
-								sdf.format(reservas.txtFechaSalida.getDate()).toString(),
-								reservas.txtValor.getText().toString(), reservas.selectedPayment);
-						con.close();
-						reservas.dispose();
-						dispose();
-						Exito exito = new Exito(txtNreserva);
-						exito.setVisible(true);
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, "Algo salió mal.");
-						e1.printStackTrace();
-					}		
+					saveToDB();		
 				} 
 				else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
@@ -336,5 +318,30 @@ public class RegistroHuesped extends JFrame {
 		labelGuardar.setBounds(0, 0, 122, 35);
 		btnguardar.add(labelGuardar);
 	}
-											
+	
+	private void saveToDB() {
+		ConnectionFactory factory = new ConnectionFactory();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Connection con = factory.createConnection();
+			Guests guests = new Guests(con);
+			Reserves reserves = new Reserves(con);
+			txtNreserva = reserves.createReserve(
+					guests.createGuest(txtNombre.getText().toString(), txtApellido.getText().toString(),
+							sdf.format(txtFechaN.getDate()).toString(), selectedNationality,
+							txtTelefono.getText().toString()),
+					sdf.format(reservas.txtFechaEntrada.getDate()).toString(),
+					sdf.format(reservas.txtFechaSalida.getDate()).toString(),
+					reservas.txtValor.getText().toString(), reservas.selectedPayment);
+			con.close();
+			reservas.dispose();
+			dispose();
+			Exito exito = new Exito(txtNreserva);
+			exito.setVisible(true);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Algo salió mal.");
+			e.printStackTrace();
+		}
+	}
+	
 }
