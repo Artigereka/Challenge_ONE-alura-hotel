@@ -143,7 +143,7 @@ public class Busqueda extends JFrame {
 		btnAtras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MenuUsuario usuario = new MenuUsuario();
+				MenuPrincipal usuario = new MenuPrincipal();
 				usuario.setVisible(true);
 				dispose();				
 			}
@@ -173,7 +173,7 @@ public class Busqueda extends JFrame {
 		btnexit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MenuPrincipal principal = new MenuPrincipal();
+				Bienvenida principal = new Bienvenida();
 				principal.setVisible(true);
 				dispose();
 			}

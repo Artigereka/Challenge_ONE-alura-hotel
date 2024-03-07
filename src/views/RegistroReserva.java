@@ -30,7 +30,7 @@ import java.com.alura.hotel.utils.ReservePrice;
 
 
 @SuppressWarnings("serial")
-public class RegistroReservas extends JFrame {
+public class RegistroReserva extends JFrame {
 
 	protected String selectedPayment = null;
 	private JPanel contentPane;
@@ -49,7 +49,7 @@ public class RegistroReservas extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistroReservas frame = new RegistroReservas();
+					RegistroReserva frame = new RegistroReserva();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,9 +61,9 @@ public class RegistroReservas extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroReservas() {
+	public RegistroReserva() {
 		super("Registro reserva - Hotel Alura");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroReservas.class.getResource("/imagenes/aH-40px.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroReserva.class.getResource("/imagenes/aH-40px.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 560);
 		setResizable(false);
@@ -91,13 +91,13 @@ public class RegistroReservas extends JFrame {
 		
 		JLabel logo = new JLabel("");
 		logo.setBounds(197, 68, 104, 107);
-		logo.setIcon(new ImageIcon(RegistroReservas.class.getResource("/imagenes/Ha-100px.png")));
+		logo.setIcon(new ImageIcon(RegistroReserva.class.getResource("/imagenes/Ha-100px.png")));
 		panel_1.add(logo);
 		
 		JLabel imagenFondo = new JLabel("");
 		imagenFondo.setBounds(0, 140, 482, 420);
 		imagenFondo.setBackground(Color.WHITE);
-		imagenFondo.setIcon(new ImageIcon(RegistroReservas.class.getResource("/imagenes/reservas-img-3.png")));
+		imagenFondo.setIcon(new ImageIcon(RegistroReserva.class.getResource("/imagenes/reservas-img-3.png")));
 		panel_1.add(imagenFondo);
 												
 		// Componentes para dejar la interfaz con estilo Material Design
@@ -108,7 +108,7 @@ public class RegistroReservas extends JFrame {
 		btnexit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MenuPrincipal principal = new MenuPrincipal();
+				Bienvenida principal = new Bienvenida();
 				principal.setVisible(true);
 				dispose();
 			}
@@ -159,7 +159,7 @@ public class RegistroReservas extends JFrame {
 		btnAtras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MenuUsuario usuario = new MenuUsuario();
+				MenuPrincipal usuario = new MenuPrincipal();
 				usuario.setVisible(true);
 				dispose();				
 			}
@@ -257,7 +257,7 @@ public class RegistroReservas extends JFrame {
 		
 		txtFechaEntrada = new JDateChooser();
 		txtFechaEntrada.getCalendarButton().setBackground(SystemColor.textHighlight);
-		txtFechaEntrada.getCalendarButton().setIcon(new ImageIcon(RegistroReservas.class.getResource("/imagenes/icon-reservas.png")));
+		txtFechaEntrada.getCalendarButton().setIcon(new ImageIcon(RegistroReserva.class.getResource("/imagenes/icon-reservas.png")));
 		txtFechaEntrada.getCalendarButton().setFont(new Font("Roboto", Font.PLAIN, 11));
 		txtFechaEntrada.setBounds(70, 135, 290, 35);
 		txtFechaEntrada.getCalendarButton().setBounds(268, 0, 21, 33);
@@ -273,7 +273,7 @@ public class RegistroReservas extends JFrame {
 
 		txtFechaSalida = new JDateChooser();
 		txtFechaSalida.getCalendarButton().setBackground(SystemColor.textHighlight);
-		txtFechaSalida.getCalendarButton().setIcon(new ImageIcon(RegistroReservas.class.getResource("/imagenes/icon-reservas.png")));
+		txtFechaSalida.getCalendarButton().setIcon(new ImageIcon(RegistroReserva.class.getResource("/imagenes/icon-reservas.png")));
 		txtFechaSalida.getCalendarButton().setFont(new Font("Roboto", Font.PLAIN, 11));
 		txtFechaSalida.setBounds(70, 220, 290, 35);
 		txtFechaSalida.getCalendarButton().setBounds(268, 0, 21, 33);
@@ -329,7 +329,7 @@ public class RegistroReservas extends JFrame {
 				if (txtFechaEntrada.getDate() != null
 						&& txtFechaSalida.getDate() != null
 						&& !txtValor.getText().isEmpty()) {	
-					RegistroHuesped registro = new RegistroHuesped(RegistroReservas.this);
+					RegistroHuesped registro = new RegistroHuesped(RegistroReserva.this);
 					registro.setVisible(true);
 				}
 				else {

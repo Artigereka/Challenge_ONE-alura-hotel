@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -32,14 +34,15 @@ import javax.swing.JSeparator;
 @SuppressWarnings("serial")
 public class RegistroHuesped extends JFrame {
 
-	private static RegistroReservas reservas;
+	private static RegistroReserva reservas;
 	private JPanel contentPane;
-	private static JTextField txtNombre;
-	private static JTextField txtApellido;
-	private static JTextField txtTelefono;
-	//private static JTextField txtNreserva;
-	private static JDateChooser txtFechaN;
-	private static JComboBox<Format> txtNacionalidad;
+	private JTextField txtNombre;
+	private JTextField txtApellido;
+	private JTextField txtTelefono;
+	private Integer txtNreserva;
+	private JDateChooser txtFechaN;
+	private JComboBox<String> txtNacionalidad;
+	private String selectedNationality = "";
 	private JLabel labelExit;
 	private JLabel labelAtras;
 	int xMouse, yMouse;
@@ -63,11 +66,11 @@ public class RegistroHuesped extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public RegistroHuesped(final RegistroReservas reservas) {
+	public RegistroHuesped(final RegistroReserva reservas) {
 		super("Registro huésped - Hotel Alura");
 		RegistroHuesped.reservas = reservas;
 		
+		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuesped.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
@@ -81,34 +84,20 @@ public class RegistroHuesped extends JFrame {
 		
 		JPanel header = new JPanel();
 		header.setBounds(0, 0, 910, 36);
-		header.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				headerMouseDragged(e);
-			     
-			}
-		});
-		header.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				headerMousePressed(e);
-			}
-		});
 		header.setLayout(null);
 		header.setBackground(SystemColor.text);
 		header.setOpaque(false);
 		header.setBounds(0, 0, 910, 36);
 		contentPane.add(header);
 		
-		/* TO DO: when i do a click other window will open and will not close the behind the new one, and if i go back
-		 * whithout close guest the tree will duplicate.
-		 * To fix this, the data must be save even when i closed reserves and take me to the guest register, i cannot
-		 * touch reserves register until i trigger any button in guest register*/	
-		final JPanel btnAtras = new JPanel();
+		JPanel btnAtras = new JPanel();
+		btnAtras.setLayout(null);
+		btnAtras.setBackground(new Color(12, 138, 199));
+		btnAtras.setBounds(0, 0, 53, 36);
 		btnAtras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				RegistroReservas reservas = new RegistroReservas();
+				RegistroReserva reservas = new RegistroReserva();
 				reservas.setVisible(true);
 				dispose();				
 			}
@@ -123,9 +112,6 @@ public class RegistroHuesped extends JFrame {
 			     labelAtras.setForeground(Color.white);
 			}
 		});
-		btnAtras.setLayout(null);
-		btnAtras.setBackground(new Color(12, 138, 199));
-		btnAtras.setBounds(0, 0, 53, 36);
 		header.add(btnAtras);
 		
 		labelAtras = new JLabel("<");
@@ -135,6 +121,120 @@ public class RegistroHuesped extends JFrame {
 		labelAtras.setBounds(0, 0, 53, 36);
 		btnAtras.add(labelAtras);
 		
+		final JPanel btnexit = new JPanel();
+		btnexit.setBounds(857, 0, 53, 36);
+		btnexit.setLayout(null);
+		btnexit.setBackground(Color.white);
+		btnexit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MenuPrincipal usuario = new MenuPrincipal();
+				usuario.setVisible(true);
+				reservas.dispose();
+				dispose();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnexit.setBackground(Color.red);
+				labelExit.setForeground(Color.white);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnexit.setBackground(Color.white);
+				labelExit.setForeground(Color.black);
+			}
+		});
+		header.add(btnexit);
+
+		labelExit = new JLabel("X");
+		labelExit.setForeground(SystemColor.black);
+		labelExit.setBounds(0, 0, 53, 36);
+		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
+		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnexit.add(labelExit);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 489, 634);
+		panel.setBackground(new Color(12, 138, 199));
+		panel.setLayout(null);
+		contentPane.add(panel);
+
+		JLabel logo = new JLabel("");
+		logo.setBounds(194, 39, 104, 107);
+		logo.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/Ha-100px.png")));
+		panel.add(logo);
+
+		JLabel imagenFondo = new JLabel("");
+		imagenFondo.setBounds(0, 121, 479, 502);
+		imagenFondo.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/registro.png")));
+		panel.add(imagenFondo);
+
+		JLabel lblTitulo = new JLabel("REGISTRO DE NUEVO HUÉSPED");
+		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitulo.setBounds(560, 55, 289, 42);
+		lblTitulo.setForeground(new Color(12, 138, 199));
+		lblTitulo.setFont(new Font("Roboto", Font.BOLD, 20));
+		contentPane.add(lblTitulo);
+
+		JLabel lblNombre = new JLabel("NOMBRE");
+		lblNombre.setBounds(562, 119, 253, 14);
+		lblNombre.setForeground(SystemColor.textInactiveText);
+		lblNombre.setFont(new Font("Roboto Black", Font.PLAIN, 18));
+		contentPane.add(lblNombre);
+
+		JLabel lblApellido = new JLabel("APELLIDO");
+		lblApellido.setBounds(560, 189, 255, 14);
+		lblApellido.setForeground(SystemColor.textInactiveText);
+		lblApellido.setFont(new Font("Roboto Black", Font.PLAIN, 18));
+		contentPane.add(lblApellido);
+
+		JLabel lblFechaN = new JLabel("FECHA DE NACIMIENTO");
+		lblFechaN.setBounds(560, 256, 255, 14);
+		lblFechaN.setForeground(SystemColor.textInactiveText);
+		lblFechaN.setFont(new Font("Roboto Black", Font.PLAIN, 18));
+		contentPane.add(lblFechaN);
+
+		JLabel lblNacionalidad = new JLabel("NACIONALIDAD");
+		lblNacionalidad.setBounds(560, 326, 255, 14);
+		lblNacionalidad.setForeground(SystemColor.textInactiveText);
+		lblNacionalidad.setFont(new Font("Roboto Black", Font.PLAIN, 18));
+		contentPane.add(lblNacionalidad);
+
+		JLabel lblTelefono = new JLabel("TELÉFONO");
+		lblTelefono.setBounds(562, 406, 253, 14);
+		lblTelefono.setForeground(SystemColor.textInactiveText);
+		lblTelefono.setFont(new Font("Roboto Black", Font.PLAIN, 18));
+		contentPane.add(lblTelefono);
+
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(560, 170, 289, 2);
+		separator_1.setForeground(new Color(12, 138, 199));
+		separator_1.setBackground(new Color(12, 138, 199));
+		contentPane.add(separator_1);
+
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(560, 240, 289, 2);
+		separator_2.setForeground(new Color(12, 138, 199));
+		separator_2.setBackground(new Color(12, 138, 199));
+		contentPane.add(separator_2);
+
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setBounds(560, 314, 289, 2);
+		separator_3.setForeground(new Color(12, 138, 199));
+		separator_3.setBackground(new Color(12, 138, 199));
+		contentPane.add(separator_3);
+
+		JSeparator separator_4 = new JSeparator();
+		separator_4.setBounds(560, 386, 289, 2);
+		separator_4.setForeground(new Color(12, 138, 199));
+		separator_4.setBackground(new Color(12, 138, 199));
+		contentPane.add(separator_4);
+
+		JSeparator separator_5 = new JSeparator();
+		separator_5.setBounds(560, 457, 289, 2);
+		separator_5.setForeground(new Color(12, 138, 199));
+		separator_5.setBackground(new Color(12, 138, 199));
+		contentPane.add(separator_5);
 		
 		txtNombre = new JTextField();
 		txtNombre.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -159,58 +259,25 @@ public class RegistroHuesped extends JFrame {
 		txtFechaN.setDateFormatString("yyyy-MM-dd");
 		contentPane.add(txtFechaN);
 		
-		txtNacionalidad = new JComboBox();
+		txtNacionalidad = new JComboBox<String>();
 		txtNacionalidad.setBounds(560, 350, 289, 36);
 		txtNacionalidad.setBackground(SystemColor.text);
 		txtNacionalidad.setFont(new Font("Roboto", Font.PLAIN, 16));
-		txtNacionalidad.setModel(new DefaultComboBoxModel(new String[] { "afgano-afgana", "alemán-", "alemana",
-				"árabe-árabe", "argentino-argentina", "australiano-australiana", "belga-belga", "boliviano-boliviana",
-				"brasileño-brasileña", "camboyano-camboyana", "canadiense-canadiense", "chileno-chilena", "chino-china",
-				"colombiano-colombiana", "coreano-coreana", "costarricense-costarricense", "cubano-cubana",
-				"danés-danesa", "ecuatoriano-ecuatoriana", "egipcio-egipcia", "salvadoreño-salvadoreña",
-				"escocés-escocesa", "español-española", "estadounidense-estadounidense", "estonio-estonia",
-				"etiope-etiope", "filipino-filipina", "finlandés-finlandesa", "francés-francesa", "galés-galesa",
-				"griego-griega", "guatemalteco-guatemalteca", "haitiano-haitiana", "holandés-holandesa",
-				"hondureño-hondureña", "indonés-indonesa", "inglés-inglesa", "iraquí-iraquí", "iraní-iraní",
-				"irlandés-irlandesa", "israelí-israelí", "italiano-italiana", "japonés-japonesa", "jordano-jordana",
-				"laosiano-laosiana", "letón-letona", "letonés-letonesa", "malayo-malaya", "marroquí-marroquí",
-				"mexicano-mexicana", "nicaragüense-nicaragüense", "noruego-noruega", "neozelandés-neozelandesa",
-				"panameño-panameña", "paraguayo-paraguaya", "peruano-peruana", "polaco-polaca", "portugués-portuguesa",
-				"puertorriqueño-puertorriqueño", "dominicano-dominicana", "rumano-rumana", "ruso-rusa", "sueco-sueca",
-				"suizo-suiza", "tailandés-tailandesa", "taiwanes-taiwanesa", "turco-turca", "ucraniano-ucraniana",
-				"uruguayo-uruguaya", "venezolano-venezolana", "vietnamita-vietnamita" }));
-		String selectedNationality = (String) txtNacionalidad.getSelectedItem();
+		txtNacionalidad.setModel(new DefaultComboBoxModel<>(new String[] {
+				"Argentina", "Boliviana", "Brasileña", "Canadiense", "Chilena", "Colombiana",
+				"Costarricense", "Cubana", "Dominicana", "Ecuatoriana", "Estadounidense",
+				"Guatemalteca", "Hondureña", "Mexicana", "Nicaragüense", "Panameña",
+				"Paraguaya", "Peruana", "Salvadoreña", "Uruguaya", "Venezolana"}));
+		txtNacionalidad.setSelectedIndex(-1);
+		txtNacionalidad.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					JComboBox<?> cb = (JComboBox<?>) e.getSource();
+					selectedNationality = (String) cb.getSelectedItem();
+				}
+			}
+		});	
 		contentPane.add(txtNacionalidad);
-		
-		JLabel lblNombre = new JLabel("NOMBRE");
-		lblNombre.setBounds(562, 119, 253, 14);
-		lblNombre.setForeground(SystemColor.textInactiveText);
-		lblNombre.setFont(new Font("Roboto Black", Font.PLAIN, 18));
-		contentPane.add(lblNombre);
-		
-		JLabel lblApellido = new JLabel("APELLIDO");
-		lblApellido.setBounds(560, 189, 255, 14);
-		lblApellido.setForeground(SystemColor.textInactiveText);
-		lblApellido.setFont(new Font("Roboto Black", Font.PLAIN, 18));
-		contentPane.add(lblApellido);
-		
-		JLabel lblFechaN = new JLabel("FECHA DE NACIMIENTO");
-		lblFechaN.setBounds(560, 256, 255, 14);
-		lblFechaN.setForeground(SystemColor.textInactiveText);
-		lblFechaN.setFont(new Font("Roboto Black", Font.PLAIN, 18));
-		contentPane.add(lblFechaN);
-		
-		JLabel lblNacionalidad = new JLabel("NACIONALIDAD");
-		lblNacionalidad.setBounds(560, 326, 255, 14);
-		lblNacionalidad.setForeground(SystemColor.textInactiveText);
-		lblNacionalidad.setFont(new Font("Roboto Black", Font.PLAIN, 18));
-		contentPane.add(lblNacionalidad);
-		
-		JLabel lblTelefono = new JLabel("TELÉFONO");
-		lblTelefono.setBounds(562, 406, 253, 14);
-		lblTelefono.setForeground(SystemColor.textInactiveText);
-		lblTelefono.setFont(new Font("Roboto Black", Font.PLAIN, 18));
-		contentPane.add(lblTelefono);
 		
 		txtTelefono = new JTextField();
 		txtTelefono.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -220,97 +287,39 @@ public class RegistroHuesped extends JFrame {
 		txtTelefono.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(txtTelefono);
 		
-		JLabel lblTitulo = new JLabel("REGISTRO DE NUEVO HUÉSPED");
-		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitulo.setBounds(560, 55, 289, 42);
-		lblTitulo.setForeground(new Color(12, 138, 199));
-		lblTitulo.setFont(new Font("Roboto", Font.BOLD, 20));
-		contentPane.add(lblTitulo);
-		
-//		JLabel lblNumeroReserva = new JLabel("NÚMERO DE RESERVA");
-//		lblNumeroReserva.setBounds(560, 474, 253, 14);
-//		lblNumeroReserva.setForeground(SystemColor.textInactiveText);
-//		lblNumeroReserva.setFont(new Font("Roboto Black", Font.PLAIN, 18));
-//		contentPane.add(lblNumeroReserva);
-//		
-//		txtNreserva = new JTextField();
-//		txtNreserva.setFont(new Font("Roboto", Font.PLAIN, 16));
-//		txtNreserva.setBounds(560, 495, 285, 33);
-//		txtNreserva.setColumns(10);
-//		txtNreserva.setBackground(Color.WHITE);
-//		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-//		contentPane.add(txtNreserva);
-		
-		JSeparator separator_1_2 = new JSeparator();
-		separator_1_2.setBounds(560, 170, 289, 2);
-		separator_1_2.setForeground(new Color(12, 138, 199));
-		separator_1_2.setBackground(new Color(12, 138, 199));
-		contentPane.add(separator_1_2);
-		
-		JSeparator separator_1_2_1 = new JSeparator();
-		separator_1_2_1.setBounds(560, 240, 289, 2);
-		separator_1_2_1.setForeground(new Color(12, 138, 199));
-		separator_1_2_1.setBackground(new Color(12, 138, 199));
-		contentPane.add(separator_1_2_1);
-		
-		JSeparator separator_1_2_2 = new JSeparator();
-		separator_1_2_2.setBounds(560, 314, 289, 2);
-		separator_1_2_2.setForeground(new Color(12, 138, 199));
-		separator_1_2_2.setBackground(new Color(12, 138, 199));
-		contentPane.add(separator_1_2_2);
-		
-		JSeparator separator_1_2_3 = new JSeparator();
-		separator_1_2_3.setBounds(560, 386, 289, 2);
-		separator_1_2_3.setForeground(new Color(12, 138, 199));
-		separator_1_2_3.setBackground(new Color(12, 138, 199));
-		contentPane.add(separator_1_2_3);
-		
-		JSeparator separator_1_2_4 = new JSeparator();
-		separator_1_2_4.setBounds(560, 457, 289, 2);
-		separator_1_2_4.setForeground(new Color(12, 138, 199));
-		separator_1_2_4.setBackground(new Color(12, 138, 199));
-		contentPane.add(separator_1_2_4);
-		
-//		JSeparator separator_1_2_5 = new JSeparator();
-//		separator_1_2_5.setBounds(560, 529, 289, 2);
-//		separator_1_2_5.setForeground(new Color(12, 138, 199));
-//		separator_1_2_5.setBackground(new Color(12, 138, 199));
-//		contentPane.add(separator_1_2_5);
-		
 		JPanel btnguardar = new JPanel();
 		btnguardar.setBounds(723, 560, 122, 35);
+		btnguardar.setLayout(null);
+		btnguardar.setBackground(new Color(12, 138, 199));
+		btnguardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btnguardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				if (RegistroHuesped.txtNombre.getText() != null && RegistroHuesped.txtFechaN.getDate() != null) {
-//					TO DO: guardar en base de datos
+				if (!txtNombre.getText().isEmpty() && !txtApellido.getText().isEmpty() && txtFechaN.getDate() != null
+						&& selectedNationality != "" && !txtTelefono.getText().isEmpty()) {
 					ConnectionFactory factory = new ConnectionFactory();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					try {
 						Connection con = factory.createConnection();
 						Guests guests = new Guests(con);
 						Reserves reserves = new Reserves(con);
-//						TO DO: Casi perfecto, están fallando los get de contenido de los drop down selectedNationality y selectedPayment
-						reserves.createReserve(
-								guests.createGuest(
-										txtNombre.getText().toString(),
-										txtApellido.getText().toString(),
-										sdf.format(txtFechaN.getDate()).toString(),
-										selectedNationality,
+						txtNreserva = reserves.createReserve(
+								guests.createGuest(txtNombre.getText().toString(), txtApellido.getText().toString(),
+										sdf.format(txtFechaN.getDate()).toString(), selectedNationality,
 										txtTelefono.getText().toString()),
 								sdf.format(reservas.txtFechaEntrada.getDate()).toString(),
 								sdf.format(reservas.txtFechaSalida.getDate()).toString(),
-								reservas.txtValor.getText().toString(),
-								reservas.selectedPayment);
+								reservas.txtValor.getText().toString(), reservas.selectedPayment);
 						con.close();
+						reservas.dispose();
+						dispose();
+						Exito exito = new Exito(txtNreserva);
+						exito.setVisible(true);
 					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Algo salió mal.");
 						e1.printStackTrace();
-					}
-					reservas.dispose();
-					dispose();
-					Exito exito = new Exito();
-					exito.setVisible(true);			
+					}		
 				} 
 				else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
@@ -318,10 +327,7 @@ public class RegistroHuesped extends JFrame {
 				
 			}
 		});
-		btnguardar.setLayout(null);
-		btnguardar.setBackground(new Color(12, 138, 199));
 		contentPane.add(btnguardar);
-		btnguardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		
 		JLabel labelGuardar = new JLabel("GUARDAR");
 		labelGuardar.setHorizontalAlignment(SwingConstants.CENTER);
@@ -329,66 +335,6 @@ public class RegistroHuesped extends JFrame {
 		labelGuardar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		labelGuardar.setBounds(0, 0, 122, 35);
 		btnguardar.add(labelGuardar);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 489, 634);
-		panel.setBackground(new Color(12, 138, 199));
-		contentPane.add(panel);
-		panel.setLayout(null);
-		
-		JLabel imagenFondo = new JLabel("");
-		imagenFondo.setBounds(0, 121, 479, 502);
-		panel.add(imagenFondo);
-		imagenFondo.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/registro.png")));
-		
-		JLabel logo = new JLabel("");
-		logo.setBounds(194, 39, 104, 107);
-		panel.add(logo);
-		logo.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/Ha-100px.png")));
-		
-		final JPanel btnexit = new JPanel();
-		btnexit.setBounds(857, 0, 53, 36);
-		contentPane.add(btnexit);
-		btnexit.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MenuPrincipal principal = new MenuPrincipal();
-				principal.setVisible(true);
-				dispose();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnexit.setBackground(Color.red);
-				labelExit.setForeground(Color.white);
-			}			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				 btnexit.setBackground(Color.white);
-			     labelExit.setForeground(Color.black);
-			}
-		});
-		btnexit.setLayout(null);
-		btnexit.setBackground(Color.white);
-		
-		labelExit = new JLabel("X");
-		labelExit.setBounds(0, 0, 53, 36);
-		btnexit.add(labelExit);
-		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
-		labelExit.setForeground(SystemColor.black);
-		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
-	}
-	
-	
-	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
-	private void headerMousePressed(java.awt.event.MouseEvent evt) {
-		xMouse = evt.getX();
-		yMouse = evt.getY();
-	}
-
-	private void headerMouseDragged(java.awt.event.MouseEvent evt) {
-		int x = evt.getXOnScreen();
-		int y = evt.getYOnScreen();
-		this.setLocation(x - xMouse, y - yMouse);
 	}
 											
 }

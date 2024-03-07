@@ -10,12 +10,13 @@ import java.sql.Statement;
 public class Reserves {
 	
 	Connection con;
+	Integer id;
 
 	public Reserves(Connection con) {
 		this.con = con;
 	}
 
-	public void createReserve(Integer huespedId, String fechaEntrada, String fechaSalida, String valor,
+	public Integer createReserve(Integer huespedId, String fechaEntrada, String fechaSalida, String valor,
 			String formaPago) throws SQLException {
 		
 		//Might be necessary add try/catch in case the id doesn't exist
@@ -32,10 +33,10 @@ public class Reserves {
 		ResultSet rst = stm.getGeneratedKeys();
 		
 		while (rst.next()) {
-			Integer id = rst.getInt(1);
+			id = rst.getInt(1);
 			System.out.println("New reserve inserted with id = " + id);
 		}
-		
+		return id;
 	}
 	
 	public void readReserve(Integer id) throws SQLException {
