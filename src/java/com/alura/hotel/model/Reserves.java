@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 
 public class Reserves {
 	
@@ -34,13 +35,13 @@ public class Reserves {
 		
 		while (rst.next()) {
 			id = rst.getInt(1);
-			System.out.println("New reserve inserted with id = " + id);
+			//System.out.println("New reserve inserted with id = " + id);
 		}
 		return id;
 	}
 	
-	public void readReserve(Integer id) throws SQLException {
-		//Another case if need to add try/catch
+	public Vector<String> readReserve(Integer id) throws SQLException {
+		Vector<String> vector = new Vector<>();
 		String statement = "SELECT * FROM reservas WHERE id = ?";
 		PreparedStatement stm = con.prepareStatement(statement);
 
@@ -54,14 +55,21 @@ public class Reserves {
 			String fechaSalida = rst.getString("fechaSalida");
 			String valor = rst.getString("valor");
 			String formaPago = rst.getString("formaPago");
-			System.out.println("Reserve id: " + id + "\n"
-					+ "Reserve huesped id: " + huespedId + "\n"
-					+ "Reserve fecha de entrada: " + fechaEntrada + "\n"
-					+ "Reserve fecha de salida: " + fechaSalida + "\n"
-					+ "Reserve valor: " + valor + "\n"
-					+ "Reserve forma de pago: " + formaPago);
+			vector.add(id.toString());
+			vector.add(huespedId);
+			vector.add(fechaEntrada);
+			vector.add(fechaSalida);
+			vector.add(valor);
+			vector.add(formaPago);
+
+//			System.out.println("Reserve id: " + id + "\n"
+//					+ "Reserve huesped id: " + huespedId + "\n"
+//					+ "Reserve fecha de entrada: " + fechaEntrada + "\n"
+//					+ "Reserve fecha de salida: " + fechaSalida + "\n"
+//					+ "Reserve valor: " + valor + "\n"
+//					+ "Reserve forma de pago: " + formaPago);
 		}
-		
+		return vector;
 	}
 	
 	public void updateReserve(Integer id, Integer huespedId, String fechaEntrada, String fechaSalida,
@@ -89,8 +97,6 @@ public class Reserves {
 	}
 	
 	public void deleteReserve(Integer id) throws SQLException {
-		System.out.println("Deleting reserve:");
-		readReserve(id);
 		String statement = "DELETE FROM reservas WHERE id = ?";
 		PreparedStatement stm = con.prepareStatement(statement);
 

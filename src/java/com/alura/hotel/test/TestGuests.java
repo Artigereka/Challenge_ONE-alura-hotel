@@ -14,10 +14,10 @@ public class TestGuests {
 		Connection con = factory.createConnection();
 
 		Guests guests = new Guests(con);
-		guests.createGuest("Artzai", "Guereca", "1999-12-31", "awefawfawefa", "123");
-		guests.readGuest(37);
-		guests.updateGuest(41, "Z", "Z", "2000-12-31", "mexicano", "456");
-		guests.deleteGuest(44);
+		//guests.createGuest("Artzai", "Guereca", "1999-12-31", "awefawfawefa", "123");
+		guests.readGuest("to");
+//		guests.updateGuest(41, "Z", "Z", "2000-12-31", "mexicano", "456");
+//		guests.deleteGuest(44);
 
 	}
 
