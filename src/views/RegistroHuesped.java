@@ -1,8 +1,8 @@
 package views;
 
 import java.com.alura.hotel.factory.ConnectionFactory;
-import java.com.alura.hotel.model.Guests;
-import java.com.alura.hotel.model.Reserves;
+import java.com.alura.hotel.model.Guest;
+import java.com.alura.hotel.model.Reserve;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -324,8 +324,8 @@ public class RegistroHuesped extends JFrame {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Connection con = factory.createConnection();
-			Guests guests = new Guests(con);
-			Reserves reserves = new Reserves(con);
+			Guest guests = new Guest(con);
+			Reserve reserves = new Reserve(con);
 			txtNreserva = reserves.createReserve(
 					guests.createGuest(txtNombre.getText().toString(), txtApellido.getText().toString(),
 							sdf.format(txtFechaN.getDate()).toString(), selectedNationality,

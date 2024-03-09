@@ -7,8 +7,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.com.alura.hotel.factory.ConnectionFactory;
-import java.com.alura.hotel.model.Guests;
-import java.com.alura.hotel.model.Reserves;
+import java.com.alura.hotel.model.Guest;
+import java.com.alura.hotel.model.Reserve;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -309,7 +309,7 @@ public class Busqueda extends JFrame {
 				String valor = tbReserves.getValueAt(index, 4).toString();
 				String formaPago = tbReserves.getValueAt(index, 5).toString();
 
-				Reserves reserves = new Reserves(con);
+				Reserve reserves = new Reserve(con);
 				reserves.updateReserve(id, huespedId, fechaEntrada, fechaSalida, valor, formaPago);
 				JOptionPane.showMessageDialog(null, "Reserva actualizada.");
 			} else if (tab == 1 && tbGuests.getSelectedRow() != -1) {
@@ -322,7 +322,7 @@ public class Busqueda extends JFrame {
 				String nacionalidad = tbGuests.getValueAt(index, 4).toString();
 				String telefono = tbGuests.getValueAt(index, 5).toString();
 
-				Guests guests = new Guests(con);
+				Guest guests = new Guest(con);
 				guests.updateGuest(id, nombre, apellido, fechaNacimiento, nacionalidad, telefono);
 				JOptionPane.showMessageDialog(null, "Huesped actualizado.");
 			}
@@ -342,13 +342,13 @@ public class Busqueda extends JFrame {
 
 			if (input.matches("\\d+")) {
 				Integer reserveNumber = Integer.parseInt(input);
-				Reserves reserves = new Reserves(con);
+				Reserve reserves = new Reserve(con);
 //				TO DO: limitar addRow si esa fila ya existiera
 				if (!reserves.readReserve(reserveNumber).isEmpty()) {
 					modelReserves.addRow(reserves.readReserve(reserveNumber));					
 				}
 			} else {
-				Guests guests = new Guests(con);
+				Guest guests = new Guest(con);
 //				TO DO: limitar addRow si esa fila ya existiera
 				if (!guests.readGuest(input).isEmpty()) {
 					modelGuests.addRow(guests.readGuest(input));					
@@ -373,7 +373,7 @@ public class Busqueda extends JFrame {
 		ConnectionFactory factory = new ConnectionFactory();
 		try {
 			Connection con = factory.createConnection();
-			Reserves reserves = new Reserves(con);
+			Reserve reserves = new Reserve(con);
 			if (tab == 0 && tbReserves.getSelectedRow() != -1) {
 				Object selectedValue = tbReserves.getValueAt(tbReserves.getSelectedRow(), 0);
 				Integer toDelete = Integer.parseInt(selectedValue.toString());
@@ -382,7 +382,7 @@ public class Busqueda extends JFrame {
 				modelReserves.removeRow(tbReserves.getSelectedRow());
 				JOptionPane.showMessageDialog(null, "Reserva eliminada.");
 			} else if (tab == 1 && tbGuests.getSelectedRow() != -1) {
-				Guests guests = new Guests(con);
+				Guest guests = new Guest(con);
 				Object selectedValue = tbGuests.getValueAt(tbGuests.getSelectedRow(), 0);
 				Integer toDelete = Integer.parseInt(selectedValue.toString());
 				guests.deleteGuest(toDelete);
