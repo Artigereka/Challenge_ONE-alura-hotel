@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import java.com.alura.hotel.model.Reserve;
@@ -41,10 +44,9 @@ public class ReserveDAO {
 		}
 	}
 
-	public Vector<String> readReserve(Integer id) {
+	public Vector<String> readReserveId(Integer id) {
 		try {
-			PreparedStatement statement = con.prepareStatement("SELECT r.fechaEntrada, r.fechaSalida, r.valor,"
-					+ "r.formaPago FROM reservas AS r WHERE id = ?");
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM reservas WHERE id = ?");
 
 			statement.setInt(1, id);
 			statement.execute();
@@ -55,7 +57,7 @@ public class ReserveDAO {
 
 			while (rst.next()) {
 				vector.add(id.toString());
-				//vector.add(rst.getString("huesped_id"));
+				vector.add(rst.getString("huesped_id"));
 				vector.add(rst.getString("fechaEntrada"));
 				vector.add(rst.getString("fechaSalida"));
 				vector.add(rst.getString("valor"));
@@ -67,10 +69,37 @@ public class ReserveDAO {
 		}
 	}
 
-	public void updateReserve(Integer id, Integer guestId, String dateIn, String dateOut, String price,	String paymentMethod) {
+	public List<Vector<String>> readReserveGuestId(Integer guestId) {
 		try {
-			PreparedStatement statement = con.prepareStatement("UPDATE reservas SET huesped_id = ?, fechaEntrada = ?,"
-					+ "fechaSalida = ?, valor = ?, formaPago = ? WHERE id = ?");
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM reservas WHERE huesped_id = ?");
+			statement.setInt(1, guestId);
+			statement.execute();
+
+			List<Vector<String>> vectorList = new ArrayList<>();
+
+			ResultSet rst = statement.executeQuery();
+
+			while (rst.next()) {
+				Vector<String> vector = new Vector<>();
+				vector.add(rst.getString("id"));
+				vector.add(guestId.toString());
+				vector.add(rst.getString("fechaEntrada"));
+				vector.add(rst.getString("fechaSalida"));
+				vector.add(rst.getString("valor"));
+				vector.add(rst.getString("formaPago"));
+				vectorList.add(vector);
+			}
+			return vectorList;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void updateReserve(Integer id, Integer guestId, String dateIn, String dateOut, String price,
+			String paymentMethod) {
+		try {
+			PreparedStatement statement = con.prepareStatement(
+					"UPDATE reservas SET huesped_id = ?, fechaEntrada = ?, fechaSalida = ?, valor = ?, formaPago = ? WHERE id = ?");
 
 			statement.setInt(1, guestId);
 			statement.setDate(2, Date.valueOf(dateIn));

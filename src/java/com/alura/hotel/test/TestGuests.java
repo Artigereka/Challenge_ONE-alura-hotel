@@ -21,6 +21,11 @@ public class TestGuests {
 //		guests.readGuest("to");
 //		guests.updateGuest(41, "Z", "Z", "2000-12-31", "mexicano", "456");
 //		guests.deleteGuest(44);
+		
+		for (int i = 0; i < gc.readGuestLastName("top").size(); i++) {
+			System.out.println(gc.readGuestLastName("top").get(i));
+		}
+		System.out.println(gc.readGuestLastName("top"));
 
 	}
 

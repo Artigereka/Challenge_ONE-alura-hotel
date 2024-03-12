@@ -1,6 +1,7 @@
 package java.com.alura.hotel.controller;
 
 import java.util.Vector;
+import java.util.List;
 
 import java.com.alura.hotel.dao.ReserveDAO;
 import java.com.alura.hotel.factory.ConnectionFactory;
@@ -20,8 +21,12 @@ public class ReserveController {
 		reserveDao.createReserve(reserve);
 	}
 
-	public Vector<String> readReserve(Integer id) {
-		return reserveDao.readReserve(id);
+	public Vector<String> readReserveId(Integer id) {
+		return reserveDao.readReserveId(id);
+	}
+	
+	public List<Vector<String>> readReserveGuestId(Integer guestId){
+		return reserveDao.readReserveGuestId(guestId);
 	}
 
 	public void updateReserve(Integer id, Integer guestId, String dateIn, String dateOut, String price,	String paymentMethod) {

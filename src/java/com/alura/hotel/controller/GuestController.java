@@ -1,6 +1,7 @@
 package java.com.alura.hotel.controller;
 
 import java.util.Vector;
+import java.util.List;
 
 import java.com.alura.hotel.dao.GuestDAO;
 import java.com.alura.hotel.factory.ConnectionFactory;
@@ -19,8 +20,12 @@ public class GuestController {
 		guestDao.createGuest(guest);
 	}
 
-	public Vector<String> readGuest(String lastName){
-		return guestDao.readGuest(lastName);
+	public List<Vector<String>> readGuestLastName(String lastName){
+		return guestDao.readGuestLastName(lastName);
+	}
+	
+	public Vector<String> readGuestId(Integer id){
+		return guestDao.readGuestId(id);
 	}
 
 	public void updateGuest(Integer id, String name, String lastName, String birthDate, String nationality, String phone){

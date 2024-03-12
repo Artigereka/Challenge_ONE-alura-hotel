@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import java.com.alura.hotel.model.Guest;
@@ -43,7 +46,7 @@ public class GuestDAO {
 		}
 	}
 	
-	public Vector<String> readGuest(String lastName){
+	public List<Vector<String>> readGuestLastName(String lastName){
 		try {
 			PreparedStatement statement = con.prepareStatement("SELECT * FROM huespedes WHERE"
 					+ "apellido = ?");
@@ -51,22 +54,49 @@ public class GuestDAO {
 			statement.setString(1, lastName);
 			statement.execute();
 
-			Vector<String> vector = new Vector<>();
+			List<Vector<String>> vectorList = new Vector<>();
 
 			ResultSet rst = statement.executeQuery();
 
 			while(rst.next()) {
+				Vector<String> vector = new Vector<>();
 				vector.add(rst.getString("id"));
 				vector.add(rst.getString("nombre"));
 				vector.add(lastName);
 				vector.add(rst.getString("fechaNacimiento"));
 				vector.add(rst.getString("nacionalidad"));
 				vector.add(rst.getString("telefono"));
+				vectorList.add(vector);
 			}
 
-			return vector; // should return a list of vectors for multiple coincidence
+			return vectorList;
 		} 
 		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Vector<String> readGuestId(Integer id) {
+		try {
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM huespedes WHERE id = ?");
+
+			statement.setInt(1, id);
+			statement.execute();
+
+			Vector<String> vector = new Vector<>();
+
+			ResultSet rst = statement.executeQuery();
+
+			while(rst.next()) {
+				vector.add(id.toString());
+				vector.add(rst.getString("nombre"));
+				vector.add(rst.getString("apellido"));
+				vector.add(rst.getString("fechaNacimiento"));
+				vector.add(rst.getString("nacionalidad"));
+				vector.add(rst.getString("telefono"));
+			}
+			return vector;
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
