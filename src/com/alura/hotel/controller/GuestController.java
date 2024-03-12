@@ -1,11 +1,11 @@
-package java.com.alura.hotel.controller;
+package com.alura.hotel.controller;
 
 import java.util.Vector;
 import java.util.List;
 
-import java.com.alura.hotel.dao.GuestDAO;
-import java.com.alura.hotel.factory.ConnectionFactory;
-import java.com.alura.hotel.model.Guest;
+import com.alura.hotel.dao.GuestDAO;
+import com.alura.hotel.factory.ConnectionFactory;
+import com.alura.hotel.model.Guest;
 import java.sql.SQLException;
 
 public class GuestController {
@@ -26,6 +26,10 @@ public class GuestController {
 	
 	public Vector<String> readGuestId(Integer id){
 		return guestDao.readGuestId(id);
+	}
+	
+	public Vector<String> readGuestFullName(String name, String lastName){
+		return guestDao.readGuestFullName(name, lastName);
 	}
 
 	public void updateGuest(Integer id, String name, String lastName, String birthDate, String nationality, String phone){

@@ -1,6 +1,6 @@
-package java.com.alura.hotel.test;
+package com.alura.hotel.test;
 
-import java.com.alura.hotel.utils.ReservePrice;
+import com.alura.hotel.utils.ReservePrice;
 
 public class TestReservePrice {
 	

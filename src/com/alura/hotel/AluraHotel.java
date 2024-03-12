@@ -1,4 +1,4 @@
-package java.com.alura.hotel;
+package com.alura.hotel;
 
 import java.awt.EventQueue;
 

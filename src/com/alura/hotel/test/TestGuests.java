@@ -1,12 +1,12 @@
-package java.com.alura.hotel.test;
+package com.alura.hotel.test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import java.com.alura.hotel.controller.GuestController;
-import java.com.alura.hotel.dao.GuestDAO;
-import java.com.alura.hotel.factory.ConnectionFactory;
-import java.com.alura.hotel.model.Guest;
+import com.alura.hotel.controller.GuestController;
+import com.alura.hotel.dao.GuestDAO;
+import com.alura.hotel.factory.ConnectionFactory;
+import com.alura.hotel.model.Guest;
 
 @SuppressWarnings("unused")
 public class TestGuests {

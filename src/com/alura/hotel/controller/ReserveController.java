@@ -1,11 +1,11 @@
-package java.com.alura.hotel.controller;
+package com.alura.hotel.controller;
 
 import java.util.Vector;
 import java.util.List;
 
-import java.com.alura.hotel.dao.ReserveDAO;
-import java.com.alura.hotel.factory.ConnectionFactory;
-import java.com.alura.hotel.model.Reserve;
+import com.alura.hotel.dao.ReserveDAO;
+import com.alura.hotel.factory.ConnectionFactory;
+import com.alura.hotel.model.Reserve;
 import java.sql.SQLException;
 
 public class ReserveController {

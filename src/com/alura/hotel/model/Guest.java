@@ -1,4 +1,4 @@
-package java.com.alura.hotel.model;
+package com.alura.hotel.model;
 
 public class Guest {
 

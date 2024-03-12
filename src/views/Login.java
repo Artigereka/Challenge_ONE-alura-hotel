@@ -1,6 +1,6 @@
 package views;
 
-import java.com.alura.hotel.utils.UserCredentials;
+import com.alura.hotel.utils.UserCredentials;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;

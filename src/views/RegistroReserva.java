@@ -19,7 +19,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -29,7 +28,7 @@ import javax.swing.border.LineBorder;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.com.alura.hotel.utils.ReservePrice;
+import com.alura.hotel.utils.ReservePrice;
 
 
 @SuppressWarnings("serial")
@@ -40,7 +39,7 @@ public class RegistroReserva extends JFrame {
 	protected JTextField txtValor;
 	protected JDateChooser txtFechaEntrada;
 	protected JDateChooser txtFechaSalida;
-	public static JComboBox<String> txtFormaPago;
+	protected JComboBox<String> txtFormaPago;
 	int xMouse, yMouse;
 	private JLabel labelExit;
 	private JLabel labelAtras;
@@ -296,42 +295,49 @@ public class RegistroReserva extends JFrame {
 		});
 		panel.add(txtFormaPago);
 
-		// TO DO:
-//		JPanel btnViejoHuesped = new JPanel();
-//		btnViejoHuesped.setToolTipText("");
-//		btnViejoHuesped.setLayout(null);
-//		btnViejoHuesped.setBackground(SystemColor.textHighlight);
-//		btnViejoHuesped.setBounds(70, 475, 130, 35);
-//		btnViejoHuesped.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-//		btnViejoHuesped.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				//TO DO: llevar a indice de huespedes para elegir
-//			}
-//		});
-//		panel.add(btnViejoHuesped);
-//
-//		JLabel labelViejoHuesped = new JLabel("VIEJO");
-//		labelViejoHuesped.setHorizontalAlignment(SwingConstants.CENTER);
-//		labelViejoHuesped.setForeground(new Color(255, 255, 255));
-//		labelViejoHuesped.setFont(new Font("Roboto", Font.PLAIN, 18));
-//		labelViejoHuesped.setBounds(0, 0, 130, 35);
-//		btnViejoHuesped.add(labelViejoHuesped);
+		JPanel btnGuestStored = new JPanel();
+		btnGuestStored.setToolTipText("");
+		btnGuestStored.setLayout(null);
+		btnGuestStored.setBackground(SystemColor.textHighlight);
+		btnGuestStored.setBounds(70, 475, 130, 35);
+		btnGuestStored.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		btnGuestStored.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtFechaEntrada.getDate() != null
+						&& txtFechaSalida.getDate() != null
+						&& !txtValor.getText().isEmpty()
+						&& selectedPayment != "") {
+					RegistroHuespedExistente registro = new RegistroHuespedExistente(RegistroReserva.this);
+					registro.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos correctamente.");
+				}
+			}
+		});
+		panel.add(btnGuestStored);
+
+		JLabel lblGuestStored = new JLabel("EXISTENTE");
+		lblGuestStored.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGuestStored.setForeground(new Color(255, 255, 255));
+		lblGuestStored.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblGuestStored.setBounds(0, 0, 130, 35);
+		btnGuestStored.add(lblGuestStored);
 		
-		JPanel btnNuevoHuesped = new JPanel();
-		btnNuevoHuesped.setToolTipText("");
-		btnNuevoHuesped.setLayout(null);
-		btnNuevoHuesped.setBackground(SystemColor.textHighlight);
-		btnNuevoHuesped.setBounds(230, 475, 130, 35);
-		btnNuevoHuesped.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-		btnNuevoHuesped.addMouseListener(new MouseAdapter() {
+		JPanel btnGuestsNew = new JPanel();
+		btnGuestsNew.setToolTipText("");
+		btnGuestsNew.setLayout(null);
+		btnGuestsNew.setBackground(SystemColor.textHighlight);
+		btnGuestsNew.setBounds(230, 475, 130, 35);
+		btnGuestsNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		btnGuestsNew.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (txtFechaEntrada.getDate() != null
 						&& txtFechaSalida.getDate() != null
 						&& !txtValor.getText().isEmpty()
 						&& selectedPayment != "") {	
-					RegistroHuesped registro = new RegistroHuesped(RegistroReserva.this);
+					RegistroHuespedNuevo registro = new RegistroHuespedNuevo(RegistroReserva.this);
 					registro.setVisible(true);
 				}
 				else {
@@ -339,14 +345,14 @@ public class RegistroReserva extends JFrame {
 				}
 			}						
 		});
-		panel.add(btnNuevoHuesped);
+		panel.add(btnGuestsNew);
 
-		JLabel labelNuevoHuesped = new JLabel("NUEVO");
-		labelNuevoHuesped.setHorizontalAlignment(SwingConstants.CENTER);
-		labelNuevoHuesped.setForeground(new Color(255, 255, 255));
-		labelNuevoHuesped.setFont(new Font("Roboto", Font.PLAIN, 18));
-		labelNuevoHuesped.setBounds(0, 0, 130, 35);
-		btnNuevoHuesped.add(labelNuevoHuesped);
+		JLabel lblGuestNew = new JLabel("NUEVO");
+		lblGuestNew.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGuestNew.setForeground(new Color(255, 255, 255));
+		lblGuestNew.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblGuestNew.setBounds(0, 0, 130, 35);
+		btnGuestsNew.add(lblGuestNew);
 		
 	}
 	
@@ -366,15 +372,4 @@ public class RegistroReserva extends JFrame {
 		}
 	}
 		
-	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
-	private void headerMousePressed(java.awt.event.MouseEvent evt) {
-		xMouse = evt.getX();
-	    yMouse = evt.getY();
-	}
-
-	private void headerMouseDragged(java.awt.event.MouseEvent evt) {
-		int x = evt.getXOnScreen();
-	    int y = evt.getYOnScreen();
-        this.setLocation(x - xMouse, y - yMouse);
-	}
 }

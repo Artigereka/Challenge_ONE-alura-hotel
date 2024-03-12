@@ -1,4 +1,4 @@
-package java.com.alura.hotel.dao;
+package com.alura.hotel.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import java.com.alura.hotel.model.Guest;
+import com.alura.hotel.model.Guest;
 
 public class GuestDAO {
 	
@@ -91,6 +91,32 @@ public class GuestDAO {
 				vector.add(id.toString());
 				vector.add(rst.getString("nombre"));
 				vector.add(rst.getString("apellido"));
+				vector.add(rst.getString("fechaNacimiento"));
+				vector.add(rst.getString("nacionalidad"));
+				vector.add(rst.getString("telefono"));
+			}
+			return vector;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Vector<String> readGuestFullName(String name, String lastName) {
+		try {
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM huespedes WHERE nombre = ? AND apellido = ?");
+
+			statement.setString(1, name);
+			statement.setString(2, lastName);
+			statement.execute();
+
+			Vector<String> vector = new Vector<>();
+
+			ResultSet rst = statement.executeQuery();
+
+			while(rst.next()) {
+				vector.add(rst.getString("id"));
+				vector.add(name);
+				vector.add(lastName);
 				vector.add(rst.getString("fechaNacimiento"));
 				vector.add(rst.getString("nacionalidad"));
 				vector.add(rst.getString("telefono"));

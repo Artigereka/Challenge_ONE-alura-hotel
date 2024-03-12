@@ -1,4 +1,4 @@
-package java.com.alura.hotel.dao;
+package com.alura.hotel.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import java.com.alura.hotel.model.Reserve;
+import com.alura.hotel.model.Reserve;
 
 public class ReserveDAO {
 	

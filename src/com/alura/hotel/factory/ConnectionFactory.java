@@ -1,10 +1,10 @@
-package java.com.alura.hotel.factory;
+package com.alura.hotel.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import java.com.alura.hotel.utils.DBCredentials;
+import com.alura.hotel.utils.DBCredentials;
 
 public class ConnectionFactory {
 	

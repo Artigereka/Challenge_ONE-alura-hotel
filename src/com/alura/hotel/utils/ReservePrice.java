@@ -1,4 +1,4 @@
-package java.com.alura.hotel.utils;
+package com.alura.hotel.utils;
 
 import java.math.BigDecimal;
 

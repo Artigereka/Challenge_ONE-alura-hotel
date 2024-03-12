@@ -157,7 +157,7 @@ public class Bienvenida extends JFrame {
 		footer.setLayout(null);
 		panel.add(footer);
 
-		JLabel lblCopyR = new JLabel("Desarrollado por Juan Simon Bournissen - 2023");
+		JLabel lblCopyR = new JLabel("Desarrollado por Artzai Orozco - 2024");
 		lblCopyR.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCopyR.setBounds(0, 11, 910, 19);
 		lblCopyR.setForeground(new Color(240, 248, 255));
