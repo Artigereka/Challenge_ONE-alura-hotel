@@ -1,11 +1,9 @@
 package com.alura.hotel.test;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import com.alura.hotel.controller.GuestController;
-import com.alura.hotel.dao.GuestDAO;
-import com.alura.hotel.factory.ConnectionFactory;
 import com.alura.hotel.model.Guest;
 
 @SuppressWarnings("unused")
@@ -22,8 +20,8 @@ public class TestGuests {
 //		guests.updateGuest(41, "Z", "Z", "2000-12-31", "mexicano", "456");
 //		guests.deleteGuest(44);
 		
-		for (int i = 0; i < gc.readGuestLastName("top").size(); i++) {
-			System.out.println(gc.readGuestLastName("top").get(i));
+		for (Vector<String> element : gc.readGuestLastName("top")) {
+			System.out.println(element);
 		}
 		System.out.println(gc.readGuestLastName("top"));
 

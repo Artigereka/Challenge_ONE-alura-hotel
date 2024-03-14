@@ -1,5 +1,7 @@
 package views;
 
+import java.sql.SQLException;
+
 import java.awt.EventQueue;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -14,7 +16,6 @@ import java.awt.event.FocusEvent;
 
 import com.alura.hotel.controller.GuestController;
 import com.alura.hotel.controller.ReserveController;
-import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 
@@ -64,7 +66,7 @@ public class Busqueda extends JFrame {
 	public Busqueda() {
 		super("Búsqueda reservas - Hotel Alura");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/imagenes/lupa2.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 571);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
@@ -215,7 +217,7 @@ public class Busqueda extends JFrame {
 		btnbBuscar.add(lblBuscar);
 		
 //		Results panel
-		final JTabbedPane panel = new JTabbedPane(JTabbedPane.TOP);
+		final JTabbedPane panel = new JTabbedPane(SwingConstants.TOP);
 		panel.setBackground(new Color(12, 138, 199));
 		panel.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panel.setBounds(20, 169, 865, 328);

@@ -2,6 +2,7 @@ package com.alura.hotel.test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import com.alura.hotel.controller.GuestController;
 import com.alura.hotel.controller.ReserveController;
@@ -25,8 +26,8 @@ public class TestReserves {
 //		rc.deleteReserveId(11);
 //		rc.deleteReserveGuestId(50);
 		
-		for (int i = 0; i < rc.readReserveGuestId(53).size(); i++) {
-			System.out.println(rc.readReserveGuestId(53).get(i));
+		for (Vector<String> element : rc.readReserveGuestId(53)) {
+			System.out.println(element);
 		}
 		System.out.println(rc.readReserveGuestId(53));
 		

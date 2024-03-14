@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.JSeparator;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -54,6 +55,7 @@ public class RegistroHuespedExistente extends JFrame{
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					RegistroHuespedExistente frame = new RegistroHuespedExistente(reservas);
@@ -75,7 +77,7 @@ public class RegistroHuespedExistente extends JFrame{
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(RegistroHuespedExistente.class.getResource("/imagenes/lOGO-50PX.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
@@ -157,7 +159,7 @@ public class RegistroHuespedExistente extends JFrame{
 
 		labelExit = new JLabel("X");
 		labelExit.setBounds(0, 0, 53, 36);
-		labelExit.setForeground(SystemColor.black);
+		labelExit.setForeground(Color.black);
 		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
 		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnexit.add(labelExit);
@@ -245,7 +247,7 @@ public class RegistroHuespedExistente extends JFrame{
 		separator_5.setBackground(new Color(12, 138, 199));
 		contentPane.add(separator_5);
 
-		txtNombre = new JComboBox<String>();
+		txtNombre = new JComboBox<>();
 		txtNombre.setEnabled(false);
 		txtNombre.setBounds(560, 135, 285, 33);
 		txtNombre.setBackground(SystemColor.text);
@@ -352,6 +354,7 @@ public class RegistroHuespedExistente extends JFrame{
 		contentPane.add(btnGuardar);
 
 		txtNombre.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				GuestController gc;
 				try {

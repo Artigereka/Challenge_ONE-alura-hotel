@@ -1,33 +1,34 @@
 package views;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.SystemColor;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
 import java.awt.Color;
-import javax.swing.JTextField;
-import com.toedter.calendar.JDateChooser;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-
+import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Toolkit;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import com.toedter.calendar.JDateChooser;
 import com.alura.hotel.utils.ReservePrice;
 
 
@@ -49,6 +50,7 @@ public class RegistroReserva extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					RegistroReserva frame = new RegistroReserva();
@@ -66,7 +68,7 @@ public class RegistroReserva extends JFrame {
 	public RegistroReserva() {
 		super("Registro reserva - Hotel Alura");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroReserva.class.getResource("/imagenes/aH-40px.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 560);
 		setResizable(false);
 		contentPane = new JPanel();
@@ -256,6 +258,7 @@ public class RegistroReserva extends JFrame {
 		txtFechaEntrada.setFont(new Font("Roboto", Font.PLAIN, 18));
 		txtFechaEntrada.setDateFormatString("yyyy-MM-dd");
 		txtFechaEntrada.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				checkDates();
 			}
@@ -272,13 +275,14 @@ public class RegistroReserva extends JFrame {
 		txtFechaSalida.setFont(new Font("Roboto", Font.PLAIN, 18));
 		txtFechaSalida.setDateFormatString("yyyy-MM-dd");
 		txtFechaSalida.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				checkDates();
 			}
 		});
 		panel.add(txtFechaSalida);
 
-		txtFormaPago = new JComboBox<String>();
+		txtFormaPago = new JComboBox<>();
 		txtFormaPago.setBounds(70, 390, 290, 35);
 		txtFormaPago.setBackground(SystemColor.text);
 		txtFormaPago.setBorder(new LineBorder(new Color(255, 255, 255), 1, true));
@@ -286,6 +290,7 @@ public class RegistroReserva extends JFrame {
 		txtFormaPago.setModel(new DefaultComboBoxModel<String>(new String[] {"Tarjeta de Credito", "Tarjeta de Debito", "Dinero en efectivo"}));
 		txtFormaPago.setSelectedIndex(-1);
 		txtFormaPago.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					JComboBox<?> cb = (JComboBox<?>) e.getSource();

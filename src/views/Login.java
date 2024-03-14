@@ -2,22 +2,23 @@ package views;
 
 import com.alura.hotel.utils.UserCredentials;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.Color;
-import java.awt.Cursor;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
-import java.awt.SystemColor;
-import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
+
+import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.SystemColor;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -43,6 +44,7 @@ public class Login extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Login frame = new Login();
@@ -61,7 +63,7 @@ public class Login extends JFrame {
 		super("Login - Hotel Alura");
 		setResizable(false);
 		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 788, 527);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

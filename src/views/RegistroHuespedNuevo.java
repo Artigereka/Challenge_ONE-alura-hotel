@@ -5,34 +5,34 @@ import com.alura.hotel.controller.ReserveController;
 import com.alura.hotel.factory.ConnectionFactory;
 import com.alura.hotel.model.Guest;
 import com.alura.hotel.model.Reserve;
+import com.toedter.calendar.JDateChooser;
 
 import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Cursor;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JComboBox;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import java.awt.Font;
-import javax.swing.ImageIcon;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.JSeparator;
 
 @SuppressWarnings("serial")
@@ -56,6 +56,7 @@ public class RegistroHuespedNuevo extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					RegistroHuespedNuevo frame = new RegistroHuespedNuevo(reservas);
@@ -76,7 +77,7 @@ public class RegistroHuespedNuevo extends JFrame {
 		
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuespedNuevo.class.getResource("/imagenes/lOGO-50PX.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.text);
@@ -154,7 +155,7 @@ public class RegistroHuespedNuevo extends JFrame {
 		header.add(btnexit);
 
 		labelExit = new JLabel("X");
-		labelExit.setForeground(SystemColor.black);
+		labelExit.setForeground(Color.black);
 		labelExit.setBounds(0, 0, 53, 36);
 		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
 		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -266,7 +267,7 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtFechaN.setDateFormatString("yyyy-MM-dd");
 		contentPane.add(txtFechaN);
 		
-		txtNacionalidad = new JComboBox<String>();
+		txtNacionalidad = new JComboBox<>();
 		txtNacionalidad.setBounds(560, 350, 289, 36);
 		txtNacionalidad.setBackground(SystemColor.text);
 		txtNacionalidad.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -277,6 +278,7 @@ public class RegistroHuespedNuevo extends JFrame {
 				"Paraguaya", "Peruana", "Salvadorenia", "Uruguaya", "Venezolana"}));
 		txtNacionalidad.setSelectedIndex(-1);
 		txtNacionalidad.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					JComboBox<?> cb = (JComboBox<?>) e.getSource();

@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -30,7 +31,7 @@ public class Exito extends JDialog {
 		try {
 			Integer nReserve = 0;
 			Exito dialog = new Exito(nReserve);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,6 +78,7 @@ public class Exito extends JDialog {
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();// sirve para cerrar la ventana actual
 				MenuPrincipal usuario = new MenuPrincipal();
