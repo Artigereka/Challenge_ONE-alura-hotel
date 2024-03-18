@@ -6,14 +6,13 @@ import java.util.List;
 import com.alura.hotel.dao.GuestDAO;
 import com.alura.hotel.factory.ConnectionFactory;
 import com.alura.hotel.model.Guest;
-import java.sql.SQLException;
 
 public class GuestController {
 	
 	private GuestDAO guestDao;
 
-	public GuestController() throws SQLException {
-		this.guestDao = new GuestDAO(new ConnectionFactory().createConnection());
+	public GuestController(){
+		this.guestDao = new GuestDAO(new ConnectionFactory().getConnection());
 	}
 
 	public void createGuest(Guest guest) {

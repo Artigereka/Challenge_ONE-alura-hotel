@@ -340,11 +340,7 @@ public class RegistroHuespedNuevo extends JFrame {
 						&& txtFechaN.getDate() != null
 						&& selectedNationality != ""
 						&& Format.isValidNumber(txtTelefono.getText())) {
-					try {
-						saveToDB();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}		
+					saveToDB();		
 				} 
 				else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos correctamente.");
@@ -362,20 +358,20 @@ public class RegistroHuespedNuevo extends JFrame {
 		btnguardar.add(labelGuardar);
 	}
 	
-	private void saveToDB() throws SQLException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private void saveToDB(){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Guest guest = new Guest(
 				txtNombre.getText().toString(),
 				txtApellido.getText().toString(),
-				sdf.format(txtFechaN.getDate()).toString(),
+				dateFormat.format(txtFechaN.getDate()).toString(),
 				selectedNationality,
 				txtTelefono.getText().toString());
 		
 		Reserve reserve = new Reserve(
 				guest.getId(),
-				sdf.format(reservas.txtFechaEntrada.getDate()).toString(),
-				sdf.format(reservas.txtFechaSalida.getDate()).toString(),
+				dateFormat.format(reservas.txtFechaEntrada.getDate()).toString(),
+				dateFormat.format(reservas.txtFechaSalida.getDate()).toString(),
 				reservas.txtValor.getText().toString(),
 				reservas.selectedPayment);
 		

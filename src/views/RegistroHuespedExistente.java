@@ -4,11 +4,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.JTextField;
 import java.awt.Color;
 import com.alura.hotel.controller.GuestController;
 import com.alura.hotel.controller.ReserveController;
 import com.alura.hotel.model.Reserve;
+import com.alura.hotel.utils.Format;
+import com.toedter.calendar.JDateChooser;
+import com.alura.hotel.model.Guest;
 import java.sql.SQLException;
 
 import javax.swing.JComboBox;
@@ -79,13 +84,13 @@ public class RegistroHuespedExistente extends JFrame{
 				.getImage(RegistroHuespedExistente.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
-		setLocationRelativeTo(null);
-		setUndecorated(true);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.text);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
+		setUndecorated(true);
+		contentPane.setLayout(null);
 
 		JPanel header = new JPanel();
 		header.setBounds(0, 0, 910, 36);
@@ -180,7 +185,7 @@ public class RegistroHuespedExistente extends JFrame{
 		imagenFondo.setIcon(new ImageIcon(RegistroHuespedExistente.class.getResource("/imagenes/registro.png")));
 		panel.add(imagenFondo);
 
-		JLabel lblTitulo = new JLabel("REGISTRO DE HU\u00C9SPED EXISTENTE");
+		JLabel lblTitulo = new JLabel("REGISTRO DE HUÉSPED EXISTENTE");
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitulo.setBounds(499, 55, 401, 42);
 		lblTitulo.setForeground(new Color(12, 138, 199));
@@ -211,7 +216,7 @@ public class RegistroHuespedExistente extends JFrame{
 		lblNacionalidad.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		contentPane.add(lblNacionalidad);
 
-		JLabel lblTelefono = new JLabel("TEL\u00C9FONO");
+		JLabel lblTelefono = new JLabel("TELÉFONO");
 		lblTelefono.setBounds(562, 406, 253, 14);
 		lblTelefono.setForeground(SystemColor.textInactiveText);
 		lblTelefono.setFont(new Font("Roboto Black", Font.PLAIN, 18));
@@ -278,33 +283,26 @@ public class RegistroHuespedExistente extends JFrame{
 		btnBuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				GuestController gc;
-				try {
-					gc = new GuestController();
-					if (!gc.readGuestLastName(txtApellido.getText()).isEmpty()) {
-						Integer guestListSize = gc.readGuestLastName(txtApellido.getText()).size();
-						for (int i = 0; i < guestListSize; i++) {
-							txtNombre.addItem(gc.readGuestLastName(txtApellido.getText()).get(i).get(1).toString());
-						}
-						txtNombre.setEnabled(true);
-					} else {
-						JOptionPane.showMessageDialog(null, "Ningún huésped encontrado con ese apellido.");
+				GuestController gc = new GuestController();
+				if (!gc.readGuestLastName(txtApellido.getText()).isEmpty()) {
+					Integer guestListSize = gc.readGuestLastName(txtApellido.getText()).size();
+					for (int i = 0; i < guestListSize; i++) {
+						txtNombre.addItem(gc.readGuestLastName(txtApellido.getText()).get(i).get(1).toString());
 					}
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+					txtNombre.setEnabled(true);
+				} else {
+					JOptionPane.showMessageDialog(null, "Ningún huésped encontrado con ese apellido.");
 				}
-				
 			}
 		});
 		contentPane.add(btnBuscar);
-
 		JLabel lblBuscar = new JLabel(new ImageIcon(Busqueda.class.getResource("/imagenes/lupa2.png")));
 		lblBuscar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBuscar.setForeground(Color.WHITE);
 		lblBuscar.setFont(new Font("Roboto", Font.PLAIN, 7));
 		lblBuscar.setBounds(1, 1, 33, 33);
 		btnBuscar.add(lblBuscar);
-
+		
 		txtFechaN = new JTextField();
 		txtFechaN.setBounds(560, 278, 285, 33);
 		txtFechaN.setEditable(false);
@@ -312,7 +310,6 @@ public class RegistroHuespedExistente extends JFrame{
 		txtFechaN.setBackground(Color.WHITE);
 		txtFechaN.setForeground(Color.black);
 		txtFechaN.setBorder(BorderFactory.createEmptyBorder());
-		contentPane.add(txtFechaN);
 
 		txtNacionalidad = new JTextField();
 		txtNacionalidad.setBounds(560, 350, 285, 33);
@@ -341,40 +338,13 @@ public class RegistroHuespedExistente extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (txtApellido.getText() != "") {
-					try {
-						saveToDB();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
+					saveToDB();
 				} else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
 				}
 			}
 		});
 		contentPane.add(btnGuardar);
-
-		txtNombre.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				GuestController gc;
-				try {
-					gc = new GuestController();
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						JComboBox<?> cb = (JComboBox<?>) e.getSource();
-						selectedName = (String) cb.getSelectedItem();
-						Vector<String> retrievedGuest = gc.readGuestFullName(selectedName, txtApellido.getText());
-						guestId = Integer.valueOf(retrievedGuest.get(0));
-						txtFechaN.setText(retrievedGuest.get(3));
-						txtNacionalidad.setText(retrievedGuest.get(4));
-						txtTelefono.setText(retrievedGuest.get(5));
-					}
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-				
-				
-			}
-		});
 
 		JLabel lblGuardar = new JLabel("GUARDAR");
 		lblGuardar.setHorizontalAlignment(SwingConstants.CENTER);
@@ -384,13 +354,13 @@ public class RegistroHuespedExistente extends JFrame{
 		btnGuardar.add(lblGuardar);
 	}
 
-	private void saveToDB() throws SQLException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private void saveToDB() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-		Reserve reserve = new Reserve(guestId, sdf.format(reservas.txtFechaEntrada.getDate()).toString(),
-				sdf.format(reservas.txtFechaSalida.getDate()).toString(), reservas.txtValor.getText().toString(),
+		Reserve reserve = new Reserve(guestId, dateFormat.format(reservas.txtFechaEntrada.getDate()).toString(),
+				dateFormat.format(reservas.txtFechaSalida.getDate()), reservas.txtValor.getText().toString(),
 				reservas.selectedPayment);
-
+		
 		ReserveController rc = new ReserveController();
 		rc.createReserve(reserve, guestId);
 
