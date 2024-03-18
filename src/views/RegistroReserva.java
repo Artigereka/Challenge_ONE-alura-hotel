@@ -35,15 +35,15 @@ import com.alura.hotel.utils.ReservePrice;
 @SuppressWarnings("serial")
 public class RegistroReserva extends JFrame {
 
-	protected String selectedPayment = "";
 	private JPanel contentPane;
-	protected JTextField txtValor;
 	protected JDateChooser txtFechaEntrada;
 	protected JDateChooser txtFechaSalida;
+	protected JTextField txtValor;
 	protected JComboBox<String> txtFormaPago;
-	int xMouse, yMouse;
+	protected String selectedPayment = "";
 	private JLabel labelExit;
 	private JLabel labelAtras;
+	int xMouse, yMouse;
 
 	/**
 	 * Launch the application.
@@ -365,15 +365,18 @@ public class RegistroReserva extends JFrame {
 		if (txtFechaEntrada.getDate() != null && txtFechaSalida.getDate() != null) {
 			Date dateIn = txtFechaEntrada.getDate();
 			Date dateOut = txtFechaSalida.getDate();
-			Integer daysDifference = (int) TimeUnit.MILLISECONDS.toDays(dateOut.getTime() - dateIn.getTime());
 			// TO DO: When a date is delete the txtValor should be like ""
 			if (dateOut.after(dateIn) || dateOut.equals(dateIn)) {
+				Integer daysDifference = (int) TimeUnit.MILLISECONDS.toDays(dateOut.getTime() - dateIn.getTime());
 				ReservePrice rp = new ReservePrice(daysDifference);
 				txtValor.setText("$ " + rp.getTotalPrice().toString());				
 			}
 			else {
 				txtValor.setText("");
 			}
+		}
+		else {
+			txtValor.setText("");
 		}
 	}
 		

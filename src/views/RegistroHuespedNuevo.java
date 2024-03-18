@@ -5,6 +5,7 @@ import com.alura.hotel.controller.ReserveController;
 import com.alura.hotel.factory.ConnectionFactory;
 import com.alura.hotel.model.Guest;
 import com.alura.hotel.model.Reserve;
+import com.alura.hotel.utils.Format;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.EventQueue;
@@ -21,6 +22,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -250,6 +253,15 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtNombre.setBackground(Color.WHITE);
 		txtNombre.setColumns(10);
 		txtNombre.setBorder(BorderFactory.createEmptyBorder());
+		txtNombre.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				if (!Format.isValidString(txtNombre.getText().toString())) {
+					txtNombre.setForeground(Color.RED);
+				} else {
+					txtNombre.setForeground(Color.BLACK);
+				}
+			}
+		});
 		contentPane.add(txtNombre);
 		
 		txtApellido = new JTextField();
@@ -258,6 +270,15 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtApellido.setColumns(10);
 		txtApellido.setBackground(Color.WHITE);
 		txtApellido.setBorder(BorderFactory.createEmptyBorder());
+		txtApellido.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				if (!Format.isValidString(txtApellido.getText().toString())) {
+					txtApellido.setForeground(Color.RED);
+				} else {
+					txtApellido.setForeground(Color.BLACK);
+				}
+			}
+		});
 		contentPane.add(txtApellido);
 		
 		txtFechaN = new JDateChooser();
@@ -294,6 +315,15 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtTelefono.setColumns(10);
 		txtTelefono.setBackground(Color.WHITE);
 		txtTelefono.setBorder(BorderFactory.createEmptyBorder());
+		txtTelefono.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				if (!Format.isValidNumber(txtTelefono.getText().toString())) {
+					txtTelefono.setForeground(Color.RED);
+				} else {
+					txtTelefono.setForeground(Color.BLACK);
+				}
+			}
+		});
 		contentPane.add(txtTelefono);
 		
 		JPanel btnguardar = new JPanel();
@@ -305,8 +335,11 @@ public class RegistroHuespedNuevo extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				if (!txtNombre.getText().isEmpty() && !txtApellido.getText().isEmpty() && txtFechaN.getDate() != null
-						&& selectedNationality != "" && !txtTelefono.getText().isEmpty()) {
+				if (Format.isValidString(txtNombre.getText().toString())
+						&& Format.isValidString(txtApellido.getText().toString())
+						&& txtFechaN.getDate() != null
+						&& selectedNationality != ""
+						&& Format.isValidNumber(txtTelefono.getText())) {
 					try {
 						saveToDB();
 					} catch (SQLException e1) {
@@ -314,7 +347,7 @@ public class RegistroHuespedNuevo extends JFrame {
 					}		
 				} 
 				else {
-					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
+					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos correctamente.");
 				}
 				
 			}

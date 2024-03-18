@@ -13,9 +13,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import com.alura.hotel.controller.GuestController;
 import com.alura.hotel.controller.ReserveController;
+import com.alura.hotel.utils.Format;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -185,12 +188,28 @@ public class Busqueda extends JFrame {
 				}
 			}
 		});
+		txtBuscar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+					if (txtBuscar.getText().length() > 0) {
+						try {
+							readFromDB(txtBuscar.getText().toString());
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
 		contentPane.add(txtBuscar);
+		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(12, 138, 199));
 		separator.setBackground(new Color(12, 138, 199));
 		separator.setBounds(530, 159, 200, 2);
 		contentPane.add(separator);
+		
 		JPanel btnbBuscar = new JPanel();
 		btnbBuscar.setLayout(null);
 		btnbBuscar.setBackground(new Color(12, 138, 199));
@@ -260,6 +279,7 @@ public class Busqueda extends JFrame {
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// check if the data comply with the required formats
 				int tab = panel.getSelectedIndex();
 				try {
 					updateToDB(tab);
@@ -309,14 +329,13 @@ public class Busqueda extends JFrame {
 			index = tbReserves.getSelectedRow();
 
 			Integer id = Integer.valueOf(tbReserves.getValueAt(index, 0).toString());
-			Integer guestId = Integer.valueOf(tbReserves.getValueAt(index, 1).toString());
 			String dateIn = tbReserves.getValueAt(index, 2).toString();
 			String dateOut = tbReserves.getValueAt(index, 3).toString();
 			String price = tbReserves.getValueAt(index, 4).toString();
 			String paymentMethod = tbReserves.getValueAt(index, 5).toString();
 
 			ReserveController rc = new ReserveController();
-			rc.updateReserve(id, guestId, dateIn, dateOut, price, paymentMethod);
+			rc.updateReserve(id, dateIn, dateOut, price, paymentMethod);
 			JOptionPane.showMessageDialog(null, "Reserva actualizada.");
 		} 
 		else if (tab == 1 && tbGuests.getSelectedRow() != -1) {
@@ -343,7 +362,8 @@ public class Busqueda extends JFrame {
 
 		ReserveController rc = new ReserveController();
 		GuestController gc = new GuestController();
-		if (input.matches("\\d+")) {
+		if (Format.isValidNumber(input)) {
+			// Read reserve
 			Integer reserveNumber = Integer.parseInt(input);
 			if (!rc.readReserveId(reserveNumber).isEmpty()) {
 				modelReserves.addRow(rc.readReserveId(reserveNumber));
@@ -352,7 +372,7 @@ public class Busqueda extends JFrame {
 				modelGuests.addRow(gc.readGuestId(guestId));				
 			}
 		} 
-		else if (input.matches("[a-zA-Z ]+")) { // input is a string
+		else if (Format.isValidString(input)) { 
 			// read guest
 			if (!gc.readGuestLastName(input).isEmpty()) {
 				Integer guestListSize = gc.readGuestLastName(input).size();
