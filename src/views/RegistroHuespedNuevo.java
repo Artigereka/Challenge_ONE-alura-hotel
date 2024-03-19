@@ -2,10 +2,10 @@ package views;
 
 import com.alura.hotel.controller.GuestController;
 import com.alura.hotel.controller.ReserveController;
-import com.alura.hotel.factory.ConnectionFactory;
 import com.alura.hotel.model.Guest;
 import com.alura.hotel.model.Reserve;
-import com.alura.hotel.utils.Format;
+import com.alura.hotel.utils.Validations;
+import com.alura.hotel.utils.Nationalities;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.EventQueue;
@@ -18,8 +18,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.event.CaretListener;
@@ -48,7 +46,7 @@ public class RegistroHuespedNuevo extends JFrame {
 	private JTextField txtTelefono;
 	private Integer txtNreserva;
 	private JDateChooser txtFechaN;
-	private JComboBox<String> txtNacionalidad;
+	private JComboBox<Nationalities> txtNacionalidad;
 	private String selectedNationality = "";
 	private JLabel labelExit;
 	private JLabel labelAtras;
@@ -255,7 +253,7 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtNombre.setBorder(BorderFactory.createEmptyBorder());
 		txtNombre.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
-				if (!Format.isValidString(txtNombre.getText().toString())) {
+				if (!Validations.isValidString(txtNombre.getText().toString())) {
 					txtNombre.setForeground(Color.RED);
 				} else {
 					txtNombre.setForeground(Color.BLACK);
@@ -272,7 +270,7 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtApellido.setBorder(BorderFactory.createEmptyBorder());
 		txtApellido.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
-				if (!Format.isValidString(txtApellido.getText().toString())) {
+				if (!Validations.isValidString(txtApellido.getText().toString())) {
 					txtApellido.setForeground(Color.RED);
 				} else {
 					txtApellido.setForeground(Color.BLACK);
@@ -288,22 +286,18 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtFechaN.setDateFormatString("yyyy-MM-dd");
 		contentPane.add(txtFechaN);
 		
-		txtNacionalidad = new JComboBox<>();
+		txtNacionalidad = new JComboBox<Nationalities>();
 		txtNacionalidad.setBounds(560, 350, 289, 36);
 		txtNacionalidad.setBackground(SystemColor.text);
 		txtNacionalidad.setFont(new Font("Roboto", Font.PLAIN, 16));
-		txtNacionalidad.setModel(new DefaultComboBoxModel<>(new String[] {
-				"Argentina", "Boliviana", "Brasilenia", "Canadiense", "Chilena", "Colombiana",
-				"Costarricense", "Cubana", "Dominicana", "Ecuatoriana", "Estadounidense",
-				"Guatemalteca", "Hondurenia", "Mexicana", "Nicaraguense", "Panamenia",
-				"Paraguaya", "Peruana", "Salvadorenia", "Uruguaya", "Venezolana"}));
+		txtNacionalidad.setModel(new DefaultComboBoxModel<Nationalities>(Nationalities.values()));
 		txtNacionalidad.setSelectedIndex(-1);
 		txtNacionalidad.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					JComboBox<?> cb = (JComboBox<?>) e.getSource();
-					selectedNationality = (String) cb.getSelectedItem();
+					selectedNationality = (String) cb.getSelectedItem().toString();
 				}
 			}
 		});	
@@ -317,7 +311,7 @@ public class RegistroHuespedNuevo extends JFrame {
 		txtTelefono.setBorder(BorderFactory.createEmptyBorder());
 		txtTelefono.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
-				if (!Format.isValidNumber(txtTelefono.getText().toString())) {
+				if (!Validations.isValidNumber(txtTelefono.getText().toString())) {
 					txtTelefono.setForeground(Color.RED);
 				} else {
 					txtTelefono.setForeground(Color.BLACK);
@@ -335,11 +329,11 @@ public class RegistroHuespedNuevo extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				if (Format.isValidString(txtNombre.getText().toString())
-						&& Format.isValidString(txtApellido.getText().toString())
+				if (Validations.isValidString(txtNombre.getText().toString())
+						&& Validations.isValidString(txtApellido.getText().toString())
 						&& txtFechaN.getDate() != null
 						&& selectedNationality != ""
-						&& Format.isValidNumber(txtTelefono.getText())) {
+						&& Validations.isValidNumber(txtTelefono.getText())) {
 					saveToDB();		
 				} 
 				else {
@@ -362,8 +356,8 @@ public class RegistroHuespedNuevo extends JFrame {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		Guest guest = new Guest(
-				txtNombre.getText().toString(),
-				txtApellido.getText().toString(),
+				Validations.capitalize(txtNombre.getText().toString()),
+				Validations.capitalize(txtApellido.getText().toString()),
 				dateFormat.format(txtFechaN.getDate()).toString(),
 				selectedNationality,
 				txtTelefono.getText().toString());
@@ -371,8 +365,8 @@ public class RegistroHuespedNuevo extends JFrame {
 		Reserve reserve = new Reserve(
 				guest.getId(),
 				dateFormat.format(reservas.txtFechaEntrada.getDate()).toString(),
-				dateFormat.format(reservas.txtFechaSalida.getDate()).toString(),
-				reservas.txtValor.getText().toString(),
+				dateFormat.format(reservas.txtFechaSalida.getDate()),
+				reservas.txtValor.getText().toString().substring(2),
 				reservas.selectedPayment);
 		
 		GuestController gc = new GuestController();

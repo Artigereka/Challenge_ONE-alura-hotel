@@ -4,17 +4,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.JTextField;
 import java.awt.Color;
 import com.alura.hotel.controller.GuestController;
 import com.alura.hotel.controller.ReserveController;
 import com.alura.hotel.model.Reserve;
-import com.alura.hotel.utils.Format;
-import com.toedter.calendar.JDateChooser;
-import com.alura.hotel.model.Guest;
-import java.sql.SQLException;
 
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
@@ -27,13 +21,10 @@ import java.awt.SystemColor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
-import java.util.Vector;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.JSeparator;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Cursor;
@@ -357,8 +348,10 @@ public class RegistroHuespedExistente extends JFrame{
 	private void saveToDB() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-		Reserve reserve = new Reserve(guestId, dateFormat.format(reservas.txtFechaEntrada.getDate()).toString(),
-				dateFormat.format(reservas.txtFechaSalida.getDate()), reservas.txtValor.getText().toString(),
+		Reserve reserve = new Reserve(guestId,
+				dateFormat.format(reservas.txtFechaEntrada.getDate()).toString(),
+				dateFormat.format(reservas.txtFechaSalida.getDate()),
+				reservas.txtValor.getText().toString().substring(2),
 				reservas.selectedPayment);
 		
 		ReserveController rc = new ReserveController();

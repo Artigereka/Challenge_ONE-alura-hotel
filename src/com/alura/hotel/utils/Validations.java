@@ -3,12 +3,12 @@ package com.alura.hotel.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class Format {
+public class Validations {
 	
 	// Check if it has date format
 	// Use in Row editing from the view "Busqueda"
 
-	public Format() {
+	public Validations() {
 		throw new AssertionError("This class cannot be instantiated.");
 	}
 
@@ -36,6 +36,24 @@ public class Format {
 		} catch (ParseException e) {
 			return false;
 		}
+	}
+	
+	public static boolean isValidPayment(String input) {
+		for (PaymentMethods paymentMethod : PaymentMethods.values()) {
+			if (paymentMethod.name().equalsIgnoreCase(input) || paymentMethod.getDisplayName().equalsIgnoreCase(input)) {
+                return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isValidNationality(String input) {
+		for (Nationalities nationalities : Nationalities.values()) {
+			if (nationalities.name().equalsIgnoreCase(input) || nationalities.getDisplayName().equalsIgnoreCase(input)) {
+                return true;
+			}
+		}
+		return false;
 	}
 
 	public static String capitalize(String input) {
