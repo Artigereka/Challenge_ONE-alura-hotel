@@ -86,6 +86,7 @@ public class RegistroReserva extends JFrame {
 		panel.setBackground(Color.WHITE);
 		panel.setBounds(0, 0, 910, 560);
 		panel.setLayout(null);
+		contentPane.add(panel);
 		
 		// Panel_1
 		JPanel panel_1 = new JPanel();
