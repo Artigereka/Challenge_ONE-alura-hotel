@@ -26,7 +26,11 @@ When a reservation is created, you can choose between register a new guest or se
 data base by the name or last name.</p>
 
 ## Program usage
-https://github.com/Artigereka/Challenge_One-alura-hotel/assets/123119927/09b8d5d5-3314-4dd1-a577-7aafec165ef
+
+
+https://github.com/Artigereka/Challenge_One-alura-hotel/assets/123119927/dcbbda3b-56fc-4fc5-8c73-53ffcbd1b8a7
+
+
 
 ## Main features
 * Possibility of creating new reservations with gest already register
